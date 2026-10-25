@@ -1,0 +1,2047 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Board Games</title>
+<meta name="claude:viewport-fit-sides" content="cover"><meta name="theme-color" content="#0a1a16"><link rel="icon" type="image/png" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><meta name="apple-mobile-web-app-title" content="Board Games">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Composición: una mesa redonda de fieltro con borde de madera en el centro; cuatro sillas alrededor (rivales a izquierda, arriba y derecha, jugador abajo) con su avatar, nombre y fichas. La guía es una columna de lectura; la jerarquía de manos es una lista ordenada porque el orden es la información. */
+:root{
+  --bg:#0a1a16;
+  --felt:#14503f;
+  --felt-deep:#0b3529;
+  --rail:#3a2416;
+  --paper:#f4efe2;
+  --ink:#17120f;
+  --suit-red:#b3261e;
+  --brass:#d6ad52;
+  --brass-ink:#2a1d05;
+  --text:#e9efe7;
+  --muted:#9db4a9;
+  --line:rgba(233,239,231,.15);
+  --panel:#10261f;
+  --danger:#c8452f;
+  --f-display:'Bodoni Moda',Georgia,'Times New Roman',serif;
+  --f-body:'Instrument Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --cw:56px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font:15px/1.5 var(--f-body);
+  padding-block:0 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+button{font:inherit;color:inherit}
+.wrap{max-width:980px;margin:0 auto}
+:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);opacity:0}
+
+/* Cabecera y pestañas */
+.top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px 20px;padding:14px 0 0}
+.brand{display:flex;align-items:center;gap:10px;font:700 20px/1 var(--f-display)}
+.bt{display:flex;flex-direction:column;gap:3px;letter-spacing:.01em}
+.bt small{font:600 9.5px/1 var(--f-body);letter-spacing:.22em;text-transform:uppercase;color:var(--brass)}
+.crown{position:absolute;top:-17px;left:50%;margin-left:-11px;font-size:22px;line-height:1;z-index:4;transform:rotate(-10deg);filter:drop-shadow(0 2px 3px rgba(0,0,0,.65));animation:bob 2.6s ease-in-out infinite;pointer-events:none}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-10deg)}50%{transform:translateY(-3px) rotate(-6deg)}}
+.mark{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--paper);color:var(--ink);font-size:17px;font-family:var(--f-body)}
+.tabs{display:flex;gap:2px}
+.tab{appearance:none;background:none;border:0;border-bottom:2px solid transparent;color:var(--muted);font:600 15px var(--f-body);min-height:44px;padding:0 12px;cursor:pointer}
+.tab[aria-selected="true"]{color:var(--text);border-bottom-color:var(--brass)}
+
+/* Barra de mesa */
+.bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 0 0}
+.meta{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+.mini{appearance:none;background:transparent;border:1px solid var(--line);border-radius:999px;font:600 13px var(--f-body);padding:0 14px;min-height:36px;cursor:pointer;display:inline-flex;align-items:center}
+.mini:hover{border-color:var(--brass)}
+
+/* Cartas */
+.card{
+  width:var(--cw);aspect-ratio:5/7;flex:none;position:relative;
+  background:var(--paper);color:var(--ink);
+  border-radius:calc(var(--cw)*.11);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.12),0 3px 8px rgba(0,0,0,.45);
+  font-family:var(--f-display);user-select:none;
+}
+.card.red{color:var(--suit-red)}
+.cr{position:absolute;left:9%;top:3%;font-weight:700;font-size:calc(var(--cw)*.36);line-height:1;letter-spacing:-.05em}
+.cs{position:absolute;left:11%;top:calc(var(--cw)*.4);font-size:calc(var(--cw)*.24);line-height:1;font-family:var(--f-body)}
+.cc{position:absolute;right:8%;bottom:5%;font-size:calc(var(--cw)*.5);line-height:1;font-family:var(--f-body)}
+.card.back{
+  background:repeating-linear-gradient(45deg,#7a1f2b 0 3px,#5a1420 3px 6px);
+  border:calc(var(--cw)*.07) solid var(--paper);
+}
+.card.dim{filter:brightness(.5) saturate(.6)}
+.card.lit{box-shadow:0 0 0 2px var(--brass),0 3px 10px rgba(0,0,0,.5)}
+.card.fresh{animation:dealIn .35s ease-out both}
+@keyframes dealIn{from{transform:translateY(-16px) scale(.92);opacity:0}to{transform:none;opacity:1}}
+.slot{width:var(--cw);aspect-ratio:5/7;border-radius:calc(var(--cw)*.11);border:1.5px dashed rgba(255,255,255,.2)}
+
+/* Mesa redonda y sillas */
+.arena{position:relative;width:100%;max-width:640px;margin:12px auto 18px;aspect-ratio:1/1.5}
+.table{
+  position:absolute;left:50%;top:50%;width:84%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;
+  background:radial-gradient(circle at 50% 42%,var(--felt) 0%,var(--felt-deep) 100%);
+  box-shadow:inset 0 0 0 3px rgba(0,0,0,.25),0 0 0 9px var(--rail),0 0 0 10px rgba(255,255,255,.1),0 18px 40px rgba(0,0,0,.5);
+}
+.mid{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:1;display:flex;flex-direction:column;align-items:center;gap:8px}
+.board{display:flex;gap:4px;--cw:clamp(28px,calc((100vw - 200px)/5.6),52px)}
+.pot{display:flex;align-items:center;gap:8px;font:700 20px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.pot small{font:600 10px var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.phase{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+.pseat{position:absolute;z-index:2;display:flex;flex-direction:column;align-items:center;gap:3px;width:76px;transition:opacity .2s}
+.s-top{top:0;left:50%;transform:translateX(-50%)}
+.s-left{left:0;top:50%;transform:translateY(-50%)}
+.s-right{right:0;top:50%;transform:translateY(-50%)}
+.s-me{bottom:0;left:50%;transform:translateX(-50%);width:max-content;min-width:84px;padding-inline:8px}
+.pseat{padding:6px 4px;border-radius:18px;background:rgba(0,0,0,.2)}
+.pseat.s-left,.pseat.s-right,.pseat.s-top{min-height:150px;justify-content:flex-start}
+.chipprev{display:flex;gap:8px;margin:10px 0 14px;flex-wrap:wrap}
+.chipprev .chip{width:36px;height:36px}
+.pseat.folded{opacity:.45}
+.pseat.out{opacity:.3}
+
+.chairwrap{position:relative;width:54px;height:54px;display:grid;place-items:center;flex:none}
+.chair{position:absolute;inset:-8px -11px -5px;border-radius:14px 14px 20px 20px;background:linear-gradient(180deg,#7d2230,#4a1420);border:3px solid #2c1a0e;border-top:14px solid #8c5e36;box-shadow:0 4px 7px rgba(0,0,0,.55),inset 0 0 0 2px rgba(255,255,255,.07);transform:rotate(var(--rot,0deg))}
+.avatar{
+  position:relative;width:40px;height:40px;border-radius:50%;overflow:hidden;padding:0;
+  display:grid;place-items:center;border:2px solid rgba(214,173,82,.6);
+  color:var(--paper);font:700 17px/1 var(--f-display);appearance:none;
+}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.avatar img.px{image-rendering:pixelated}
+button.avatar{cursor:pointer}
+.pseat.turn .avatar{border-color:var(--brass);box-shadow:0 0 0 3px rgba(214,173,82,.4)}
+.pseat.win .avatar{border-color:var(--brass);box-shadow:0 0 0 4px rgba(214,173,82,.5)}
+.badges{position:absolute;top:-2px;right:-10px;display:flex;flex-direction:column;gap:2px;z-index:3}
+.badge{font-size:9px;font-weight:700;letter-spacing:.05em;padding:1px 5px;border-radius:999px;background:var(--paper);color:var(--ink);text-align:center}
+.badge.d{background:var(--brass);color:var(--brass-ink)}
+.nm{font-weight:600;font-size:12px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}
+.stack{font-size:12px;font-weight:600;color:var(--brass);font-variant-numeric:tabular-nums}
+.hand{display:flex;gap:3px;--cw:28px}
+.s-me .hand{--cw:54px;gap:5px}
+.act{min-height:15px;max-width:100%;font-size:10.5px;color:var(--muted);text-align:center;line-height:1.3}
+.a-call{color:#7fe0a0;font-weight:700}.a-raise{color:#ffb84d;font-weight:700}.a-allin{color:#ff6b5a;font-weight:700}.a-check{color:#9cc9ff;font-weight:600}.a-fold{color:#b9a7a7}
+.log li.a-call,.log li.a-raise,.log li.a-allin,.log li.a-check,.log li.a-fold{font-weight:500}
+.chatl{list-style:none;margin:8px 0;padding:0;max-height:42vh;overflow:auto;font-size:14px;line-height:1.4}
+.chatl li{padding:4px 0;word-break:break-word}.chatl b{color:var(--brass)}.chatl .me b{color:#9fe0b4}.chatl .empty{color:var(--muted)}
+.chatrow{display:flex;gap:8px;align-items:center}
+.chatrow input{flex:1;min-width:0;background:#0a1a16;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:0 12px;min-height:44px;font:16px var(--f-body);transition:border-color .2s}
+/* ===== Botones con personalidad ===== */
+.bar{flex-direction:column;align-items:stretch;gap:10px;padding-top:12px}
+.meta{align-self:center;padding:4px 14px;border-radius:99px;background:rgba(0,0,0,.28);border:1px solid var(--line);font-weight:600;letter-spacing:.02em}
+.tools{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;width:100%}
+.tool{appearance:none;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:56px;padding:6px 2px;border-radius:14px;border:1px solid rgba(214,173,82,.28);background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));color:var(--text);font:600 10.5px/1 var(--f-body);letter-spacing:.03em;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.4);transition:transform .12s,box-shadow .12s,border-color .15s,background .15s;-webkit-tap-highlight-color:transparent}
+.tool i{font-style:normal;font-size:20px;line-height:1;filter:drop-shadow(0 1px 1px rgba(0,0,0,.5))}
+.tool span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tool:hover{border-color:var(--brass);background:linear-gradient(180deg,rgba(214,173,82,.2),rgba(214,173,82,.05))}
+.tool:active{transform:translateY(3px);box-shadow:0 0 0 rgba(0,0,0,.4)}
+.tool.live{border-color:#5fd08a;color:#c4f3d6;background:linear-gradient(180deg,rgba(95,208,138,.22),rgba(95,208,138,.05))}
+.tool.live i{animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+.tool .dot{position:absolute;top:3px;right:5px;margin:0}
+.mini{background:rgba(255,255,255,.05);transition:transform .1s,border-color .15s,background .15s}
+.mini:hover{background:rgba(214,173,82,.12)}
+.mini:active{transform:scale(.96)}
+.actions{background:linear-gradient(180deg,#153629,#0d2118);border:1px solid rgba(214,173,82,.25);box-shadow:0 12px 30px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.06)}
+.actions.mine{animation:glow 2.4s ease-in-out infinite}
+@keyframes glow{0%,100%{box-shadow:0 12px 30px rgba(0,0,0,.35),0 0 0 0 rgba(214,173,82,0)}50%{box-shadow:0 12px 30px rgba(0,0,0,.35),0 0 0 3px rgba(214,173,82,.35)}}
+.btns{grid-template-columns:1fr 1.15fr 1.25fr;gap:10px}
+.btn{position:relative;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:64px;border-radius:16px;font:700 15px/1.1 var(--f-body);letter-spacing:.01em;transition:transform .1s,box-shadow .1s,filter .15s;-webkit-tap-highlight-color:transparent}
+.btn .ic{font-size:16px;line-height:1;font-weight:700}
+.btn .t{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;opacity:.9}
+.btn .v{font:700 21px/1.05 var(--f-display);font-variant-numeric:tabular-nums}
+.btn.fold{background:linear-gradient(180deg,#4d1b15,#33110d);border:1px solid #93382a;color:#ffb8a8;box-shadow:0 4px 0 #1d0907}
+.btn.call{background:linear-gradient(180deg,#2a8d62,#176143);border:1px solid #55cc93;color:#ecfff5;box-shadow:0 4px 0 #0c3a28}
+.btn.raise{background:linear-gradient(180deg,#f2d07c,#c99a36);border:1px solid #f7de9f;color:var(--brass-ink);box-shadow:0 4px 0 #7d5d17}
+.btn:hover:not(:disabled){filter:brightness(1.08)}
+.btn:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.5)}
+.btn:disabled{opacity:.38;box-shadow:none;filter:saturate(.5)}
+.quick{gap:8px}
+.quick button{min-height:38px;padding:0 15px;background:rgba(214,173,82,.1);border:1px solid rgba(214,173,82,.45);color:#f0dca4;font-weight:700;font-size:12.5px;transition:transform .1s,background .15s,color .15s}
+.quick button:active{transform:scale(.94);background:var(--brass);color:var(--brass-ink)}
+.rz input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:10px;border-radius:99px;background:linear-gradient(90deg,#3a2f12,var(--brass));margin:10px 0}
+.rz input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3cf,#d6ad52 60%,#8a6a1f);border:2px solid #fff3cf;box-shadow:0 3px 8px rgba(0,0,0,.55)}
+.rz input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3cf,#d6ad52 60%,#8a6a1f);border:2px solid #fff3cf;box-shadow:0 3px 8px rgba(0,0,0,.55)}
+.rz input[type=range]::-moz-range-track{height:10px;border-radius:99px;background:linear-gradient(90deg,#3a2f12,#d6ad52)}
+.dot{display:inline-grid;place-items:center;min-width:16px;height:16px;border-radius:99px;background:var(--danger);color:#fff;font:700 10px var(--f-body);padding:0 4px;margin-left:5px}
+.hn{max-width:100%;font-size:10.5px;font-weight:600;color:var(--paper);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.won{font-weight:700;color:var(--brass);font-size:12px;font-variant-numeric:tabular-nums}
+.chip{width:15px;height:15px;border-radius:50%;flex:none;background:radial-gradient(circle,var(--chipc,#c8452f) 0 36%,transparent 38%),repeating-conic-gradient(var(--paper) 0 20deg,var(--chipc,#c8452f) 20deg 60deg);box-shadow:0 1px 0 rgba(0,0,0,.4)}
+.dots i{display:inline-block;width:3px;height:3px;border-radius:50%;background:var(--muted);margin-left:3px;animation:blink 1s infinite}
+.dots i:nth-child(2){animation-delay:.2s}.dots i:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,100%{opacity:.2}50%{opacity:1}}
+
+/* Acciones */
+.actions{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:12px;display:grid;gap:10px;min-height:150px;align-content:start}
+.actions h3{margin:0;font:700 22px/1.2 var(--f-display)}
+.actions p{margin:0}
+.status{color:var(--muted);align-self:center;text-align:center}
+.btns{display:grid;grid-template-columns:1fr 1.2fr 1.2fr;gap:8px}
+.btn{appearance:none;min-height:48px;padding:6px 8px;border-radius:12px;border:1px solid var(--line);background:transparent;font-weight:600;font-size:15px;cursor:pointer;font-variant-numeric:tabular-nums}
+.btn.fold{border-color:rgba(200,69,47,.6);color:#f2a999}
+.btn.call{background:#1b4739;border-color:rgba(255,255,255,.2)}
+.btn.raise{background:var(--brass);border-color:var(--brass);color:var(--brass-ink)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.rz{display:grid;gap:8px}
+.rz input[type=range]{width:100%;accent-color:var(--brass);margin:4px 0}
+.quick{display:flex;flex-wrap:wrap;gap:6px}
+.quick button{appearance:none;background:transparent;border:1px solid var(--line);border-radius:999px;font-weight:600;font-size:12px;min-height:32px;padding:0 12px;cursor:pointer}
+.quick button:hover{border-color:var(--brass)}
+.note{font-size:12.5px;color:var(--muted)}
+
+/* Ayuda e historial */
+.hint,.log{margin-top:14px}
+.hh{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.hl{font:600 11px var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.sw{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;cursor:pointer;min-height:32px}
+.sw input{accent-color:var(--brass);width:16px;height:16px}
+#hintBody{margin-top:6px;min-height:62px}
+.hrow{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-weight:600}
+.hrow span{color:var(--brass);font-variant-numeric:tabular-nums}
+.meter{position:relative;height:8px;border-radius:999px;background:rgba(255,255,255,.1);margin:8px 0 6px}
+.meter i{position:absolute;left:0;top:0;bottom:0;border-radius:999px;background:var(--brass)}
+.meter b{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--text);border-radius:2px}
+.muted{color:var(--muted)}
+.small{font-size:12.5px;margin:0}
+.log h3{margin:0 0 6px;font:600 11px var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.log ul{list-style:none;margin:0;padding:0;max-height:140px;overflow:auto;font-size:13px;color:var(--muted)}
+.log li{padding:3px 0;border-top:1px solid var(--line)}
+.log li:first-child{color:var(--text);border-top:0}
+
+/* Hojas superpuestas y perfil */
+.sheet{position:fixed;inset:0;z-index:50;background:rgba(3,10,8,.78);display:grid;place-items:center;
+  padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.panel{width:100%;max-width:560px;max-height:100%;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px}
+.panel h2{margin:0 0 8px;font:700 24px/1.15 var(--f-display)}
+.panel .row{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:8px;margin-top:14px}
+.over{text-align:center}
+.over p{color:var(--muted);margin:0 0 16px}
+.prof{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:10px 0 14px}
+.avatar.big{width:84px;height:84px;font-size:34px;flex:none}
+.pf{display:grid;gap:6px;flex:1;min-width:190px;margin-bottom:12px}
+.prof .pf{margin-bottom:0}
+.pf label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.pf input[type=text],.pf input[type=number]{min-height:44px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.25);color:var(--text);padding:0 12px;font:16px var(--f-body);width:100%}
+.pf .pair{display:flex;gap:8px;flex-wrap:wrap}
+.mcb{display:grid;gap:8px;margin:2px 0 12px}
+.mcrow{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px}
+.mct{font-weight:600;font-size:15px}
+.tgl{display:inline-flex;cursor:pointer}
+.tgl input{appearance:none;-webkit-appearance:none;position:relative;width:48px;height:28px;margin:0;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid var(--line);cursor:pointer;transition:background .15s}
+.tgl input::after{content:"";position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:var(--paper);box-shadow:0 1px 3px rgba(0,0,0,.5);transition:transform .15s}
+.tgl input:checked{background:var(--brass);border-color:var(--brass)}
+.tgl input:checked::after{transform:translateX(20px);background:var(--brass-ink)}
+@media (prefers-reduced-motion:reduce){.tgl input,.tgl input::after{transition:none}}
+
+/* Guía */
+.guide{max-width:760px;margin:0 auto;padding-top:8px}
+.guide h1{margin:24px 0 12px;font:700 clamp(32px,7vw,48px)/1.05 var(--f-display);text-wrap:balance}
+.guide h2{margin:0 0 14px;font:700 28px/1.15 var(--f-display);text-wrap:balance;scroll-margin-top:16px}
+.guide h3{margin:0;font:600 17px/1.3 var(--f-body)}
+.guide section{margin-top:56px}
+.guide p,.guide li{max-width:65ch}
+.guide p{margin:0 0 12px}
+.guide ul{padding-left:20px;margin:0 0 12px;display:grid;gap:8px}
+.lead{font-size:18px;line-height:1.55;color:#cfe0d6;max-width:60ch}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 0}
+.toc button{appearance:none;background:transparent;border:1px solid var(--line);border-radius:999px;font-weight:500;font-size:13.5px;min-height:36px;padding:0 14px;cursor:pointer}
+.toc button:hover{border-color:var(--brass)}
+.defs{display:grid;grid-template-columns:minmax(120px,max-content) minmax(0,1fr);gap:12px 22px;margin:0 0 14px}
+.defs dt{font-weight:700;color:var(--brass)}
+.defs dd{margin:0;max-width:60ch}
+.stages{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:22px 20px;margin:18px 0}
+.st p{font-size:14px;color:var(--muted);margin:8px 0 0}
+.mb{display:flex;gap:3px;margin:8px 0 0}
+.mb i{display:block;width:20px;aspect-ratio:5/7;border-radius:3px;border:1px dashed rgba(255,255,255,.3)}
+.mb i.on{background:var(--paper);border:0}
+.aside{margin-top:18px;padding-top:12px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+.aside b{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--brass);margin-right:6px}
+.rks{list-style:none;margin:0;padding:0}
+.rk{display:grid;grid-template-columns:36px minmax(0,1fr);gap:0 14px;padding:16px 0;border-top:1px solid var(--line)}
+.rk .n{font:700 28px/1 var(--f-display);color:var(--brass);text-align:right}
+.rk h3{margin:0}
+.rk p{margin:2px 0 8px;color:var(--muted);font-size:14px}
+.ex{display:flex;flex-wrap:wrap;gap:4px;--cw:36px}
+.rk .fr{font-size:12px;color:var(--muted);margin-top:8px}
+.cmp{display:grid;gap:10px;margin:14px 0}
+.cmp .ex{align-items:center;gap:4px}
+.cmp .lb{font-size:12.5px;color:var(--muted);flex-basis:100%}
+.panel .rk{padding:12px 0}
+.panel .rk p{margin-bottom:6px}
+.panel .ex{--cw:30px}
+
+@media (min-width:720px){
+  .arena{aspect-ratio:1/1.12}
+  .board{--cw:66px;gap:8px}
+  .pseat{width:104px;gap:4px}
+  .chairwrap{width:70px;height:70px}
+  .avatar{width:52px;height:52px;font-size:21px}
+  .nm,.stack{font-size:14px}
+  .hand{--cw:42px}
+  .s-me .hand{--cw:72px}
+  .act,.hn{font-size:12px}
+  .pot{font-size:26px}
+  .badge{font-size:10px}
+}
+@media (max-width:520px){
+  .defs{grid-template-columns:minmax(0,1fr);gap:2px}
+  .defs dd{margin-bottom:10px}
+  .btn{font-size:14px}
+}
+@media (prefers-reduced-motion:reduce){
+  .card.fresh,.dots i{animation:none}
+  .pseat{transition:none}
+}
+.panel textarea{width:100%;min-height:84px;margin:6px 0;background:#0a1a16;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:8px;font:11px/1.3 monospace;word-break:break-all}.panel .row.sp{justify-content:stretch}.panel .row.sp .btn{flex:1}.swr{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:6px 0 12px}.swr button{width:32px;height:32px;border-radius:50%;border:2px solid var(--line);cursor:pointer;padding:0}.swr button[aria-pressed=true]{border-color:var(--brass);box-shadow:0 0 0 2px rgba(214,173,82,.45)}.swr input[type=color]{width:38px;height:32px;padding:0;border:0;background:none;cursor:pointer}
+
+/* Menú de inicio */
+.menu{position:fixed;inset:0;z-index:40;overflow:auto;background:radial-gradient(120% 70% at 50% 0%,var(--felt-deep) 0%,var(--bg) 62%)}
+.mwrap{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:max(28px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(28px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+#mHome{width:100%;text-align:center}
+.fan{display:flex;justify-content:center;height:112px;padding-top:14px;margin-bottom:30px;--cw:64px}
+.fan .card{margin-left:-26px;transform-origin:50% 140%;transform:rotate(var(--a));animation:fanout .8s cubic-bezier(.2,.8,.2,1) both}
+.fan .card:first-child{margin-left:0}
+.fan .card:nth-child(1){--a:-18deg}.fan .card:nth-child(2){--a:-9deg}.fan .card:nth-child(3){--a:0deg}.fan .card:nth-child(4){--a:9deg}.fan .card:nth-child(5){--a:18deg}
+@keyframes fanout{from{transform:rotate(0deg) translateY(12px)}}
+.mtitle{margin:0;font:700 clamp(44px,13vw,68px)/1 var(--f-display);color:var(--paper);letter-spacing:-.01em}
+.mby{margin:8px 0 28px;color:var(--brass);font:600 13px var(--f-body);letter-spacing:.08em}
+.mbtns{display:grid;gap:12px;width:min(100%,420px);margin:0 auto}
+.mbtn{appearance:none;display:flex;flex-direction:column;align-items:flex-start;gap:3px;width:100%;min-height:68px;padding:14px 18px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .1s,filter .15s}
+.mbtn:hover{filter:brightness(1.1)}.mbtn:active{transform:translateY(2px)}
+.mbtn .mt{font:700 22px/1.1 var(--f-display)}
+.mbtn .ms{font-size:13px;color:var(--muted)}
+.mbtn.gold{background:linear-gradient(180deg,#f2d07c,#c99a36);border-color:#f7de9f;color:var(--brass-ink);box-shadow:0 4px 0 #7d5d17}
+.mbtn.gold .ms{color:rgba(42,29,5,.78)}
+.mbtn.felt{background:linear-gradient(180deg,var(--felt),var(--felt-deep));border-color:rgba(255,255,255,.18)}
+.mbtn.felt .ms{color:#bcd3c8}
+.mstep{display:flex;align-items:center;justify-content:center;gap:12px;margin:-2px 0 6px;color:var(--muted);font-size:13px}
+.mstep b{min-width:78px;text-align:center;color:var(--text);font-weight:600}
+.msub{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:24px}
+.msub .mini{min-height:44px;padding:0 18px}
+.mpanel{margin:0 auto}
+.mpanel>.row:first-child{justify-content:flex-start;margin:0 0 10px}
+@media (prefers-reduced-motion:reduce){.fan .card{animation:none}}
+
+/* Animaciones */
+.arena{--W:min(calc(100vw - 32px),640px)}
+.s-top{--fx:0px;--fy:calc(var(--W)*.75 - 80px)}
+.s-me{--fx:0px;--fy:calc(var(--W)*-.75 + 110px)}
+.s-left{--fx:calc(var(--W)*.5 - 44px);--fy:0px}
+.s-right{--fx:calc(var(--W)*-.5 + 44px);--fy:0px}
+@media (min-width:720px){
+  .s-top{--fy:calc(var(--W)*.56 - 100px)}.s-me{--fy:calc(var(--W)*-.56 + 130px)}
+  .s-left{--fx:calc(var(--W)*.5 - 56px)}.s-right{--fx:calc(var(--W)*-.5 + 56px)}
+}
+.pseat .card.fresh{animation:dealFly .45s cubic-bezier(.2,.8,.25,1) var(--dl,0ms) both}
+.s-me .card.fresh{animation-name:dealFlip}
+.pseat:not(.s-me) .card.fresh:not(.back){animation:flipIn .5s ease-out var(--dl,0ms) both}
+.board{perspective:700px}
+.board .card.fresh{animation:boardIn .55s cubic-bezier(.2,.8,.25,1) var(--dl,0ms) both}
+@keyframes dealFly{0%{opacity:0;transform:translate(var(--fx,0),var(--fy,0)) rotate(-24deg) scale(.5)}12%{opacity:1}100%{opacity:1;transform:none}}
+@keyframes dealFlip{0%{opacity:0;transform:translate(var(--fx,0),var(--fy,0)) rotate(-24deg) scale(.5) rotateY(90deg)}25%{opacity:1}100%{opacity:1;transform:none}}
+@keyframes flipIn{0%{opacity:.2;transform:perspective(500px) rotateY(90deg) scale(1.08)}100%{opacity:1;transform:none}}
+@keyframes boardIn{0%{opacity:0;transform:translateY(-60px) scale(.6) rotate(-8deg) rotateY(80deg)}100%{opacity:1;transform:none}}
+.pot span{display:inline-block}
+.pot span.bump{animation:bump .45s ease-out}
+@keyframes bump{40%{transform:scale(1.4);color:var(--brass)}}
+.pseat.turn .avatar{animation:turnPulse 1.5s ease-in-out infinite}
+@keyframes turnPulse{0%,100%{box-shadow:0 0 0 3px rgba(214,173,82,.4)}50%{box-shadow:0 0 0 7px rgba(214,173,82,.12)}}
+.pseat.win .avatar{animation:winPulse 1.1s ease-in-out infinite}
+@keyframes winPulse{0%,100%{box-shadow:0 0 0 4px rgba(214,173,82,.5);transform:scale(1)}50%{box-shadow:0 0 0 9px rgba(214,173,82,.15);transform:scale(1.08)}}
+.won{animation:wonUp .8s cubic-bezier(.2,.8,.25,1) both}
+@keyframes wonUp{0%{opacity:0;transform:translateY(10px) scale(.7)}60%{transform:translateY(-3px) scale(1.2)}100%{opacity:1;transform:none}}
+.sheet:not([hidden]) .panel{animation:popIn .24s cubic-bezier(.2,.9,.3,1.15) both}
+#mMp:not([hidden]){animation:popIn .26s cubic-bezier(.2,.9,.3,1.15) both}
+@keyframes popIn{from{opacity:0;transform:translateY(10px) scale(.95)}to{opacity:1;transform:none}}
+.menu:not([hidden]) .mbtns>*,.menu:not([hidden]) .msub{animation:rise .5s cubic-bezier(.2,.8,.25,1) both}
+.mbtns>*:nth-child(1){animation-delay:.05s!important}.mbtns>*:nth-child(2){animation-delay:.12s!important}.mbtns>*:nth-child(3){animation-delay:.19s!important}.mbtns>*:nth-child(4){animation-delay:.26s!important}.menu .msub{animation-delay:.34s!important}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.mini[aria-pressed=true]{background:var(--brass);border-color:var(--brass);color:var(--brass-ink)}
+@media (prefers-reduced-motion:reduce){
+  .card.fresh,.pot span.bump,.pseat.turn .avatar,.pseat.win .avatar,.won,.sheet .panel,#mMp,.menu .mbtns>*,.menu .msub{animation:none!important}
+}
+/* Pantalla fija: sin desplazamiento (la guía sí se desplaza dentro de su propio marco) */
+html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+body{height:100dvh;padding-block:0 max(6px,env(safe-area-inset-bottom,0px))}
+.wrap{height:100%;display:flex;flex-direction:column}
+.top{flex:none}
+main{flex:1;min-height:0;display:flex;flex-direction:column}
+#play{flex:1;min-height:0;display:flex;flex-direction:column;gap:6px}
+#guide{flex:1;min-height:0;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+#play .bar{flex:none;padding:6px 0 0;gap:6px}
+#play .tool{min-height:44px}
+#play .arena{flex:1 1 0;min-height:0;width:100%;max-width:640px;aspect-ratio:auto;margin:0 auto;container-type:size}
+#play .table{width:min(84cqw,88cqh);height:auto;aspect-ratio:1}
+#play .pseat.s-left,#play .pseat.s-right,#play .pseat.s-top{min-height:0}
+#play .actions{flex:none;min-height:0;padding:10px;gap:8px}
+#play .btn{min-height:54px}
+#play .quick button{min-height:34px}
+#play .hint{flex:none;margin:0}
+#hintBody{min-height:0;margin-top:2px}
+#play .hint .small{display:none}
+#play .log{display:none}
+
+/* Tamaños proporcionales: todo lo de la mesa escala con el espacio disponible (--u ≈ 1px en un móvil vertical de 360×480) */
+#play .arena>*{--u:min(.2778cqw,.2083cqh)}
+#play .pseat{width:calc(var(--u)*72);gap:calc(var(--u)*2);padding:calc(var(--u)*5) calc(var(--u)*3);border-radius:calc(var(--u)*16)}
+#play .s-me{width:max-content;min-width:calc(var(--u)*84);padding-inline:calc(var(--u)*8)}
+#play .chairwrap{width:calc(var(--u)*52);height:calc(var(--u)*52)}
+#play .avatar{width:calc(var(--u)*40);height:calc(var(--u)*40);font-size:max(10px,calc(var(--u)*17))}
+#play .nm,#play .stack{font-size:max(9px,calc(var(--u)*12))}
+#play .act,#play .hn,#play .won{font-size:max(8px,calc(var(--u)*10.5));min-height:0}
+#play .badge{font-size:max(7px,calc(var(--u)*9))}
+#play .hand{--cw:calc(var(--u)*28);gap:calc(var(--u)*3)}
+#play .s-me .hand{--cw:calc(var(--u)*52);gap:calc(var(--u)*5)}
+#play .board{--cw:calc(var(--u)*38);gap:calc(var(--u)*4)}
+#play .mid{gap:calc(var(--u)*7)}
+#play .pot{font-size:max(13px,calc(var(--u)*20));gap:calc(var(--u)*6)}
+#play .pot small{font-size:max(8px,calc(var(--u)*10))}
+#play .phase{font-size:max(8px,calc(var(--u)*11))}
+@media (orientation:portrait) and (max-height:700px){
+  #play .tool{min-height:36px;flex-direction:row;gap:4px;padding:2px 4px}
+  #play .tool span{display:none}
+  #play .bar{gap:4px}
+  #play .actions{padding:8px;gap:6px}
+  #play .btn{min-height:46px}
+}
+@media (orientation:portrait) and (max-height:620px){#play .hint{display:none}}
+/* Modo horizontal automático (teléfono girado) */
+.only-land{display:none!important}
+@media (orientation:landscape) and (min-aspect-ratio:13/10){
+  .wrap{max-width:none}
+  body:has(#play:not([hidden])) .top{display:none}
+  #play{display:grid;grid-template-columns:minmax(0,1fr) minmax(190px,230px);grid-template-rows:auto auto 1fr;column-gap:12px;align-items:start;gap:0 12px;height:100%;padding-top:max(4px,env(safe-area-inset-top,0px))}
+  #play .bar{grid-column:1/-1;grid-row:1;flex-direction:row;align-items:center;justify-content:space-between;padding:2px 0 0}
+  #play .meta{align-self:center;font-size:12px;padding:2px 12px}
+  #play .tools{display:flex;width:auto;gap:6px}
+  #play .tool,#play .tool.only-land{min-height:34px;min-width:40px;padding:2px 10px;flex-direction:row;box-shadow:0 2px 0 rgba(0,0,0,.4)}
+  #play .tool.only-land{display:flex!important}
+  #play .tool span{display:none}
+  #play .tool i{font-size:17px}
+  #play .arena{grid-column:1;grid-row:2/span 2;align-self:stretch;height:auto;max-width:none;min-height:0;margin:4px 0}
+  #play .actions{grid-column:2;grid-row:2;margin-top:4px}
+  #play .hint{grid-column:2;grid-row:3;margin-top:8px}
+  #play .btn{min-height:48px}
+  #play .table{width:82%;height:82%;aspect-ratio:auto;border-radius:999px}
+  #play .phase{display:none}
+  #play .arena>*{--u:min(.1786cqw,.3333cqh)}
+  #play .board{--cw:calc(var(--u)*42);gap:calc(var(--u)*5)}
+  #play .pot{font-size:max(13px,calc(var(--u)*19))}
+  #play .pseat{width:max-content;min-width:0;min-height:0;display:grid;grid-template-columns:auto auto;column-gap:calc(var(--u)*8);row-gap:1px;align-items:center;justify-items:center;padding:calc(var(--u)*4) calc(var(--u)*8)}
+  #play .pseat .chair{display:none}
+  #play .pseat .chairwrap{grid-column:1;grid-row:1;width:calc(var(--u)*44);height:calc(var(--u)*44)}
+  #play .pseat .nm{grid-column:1;grid-row:2}
+  #play .pseat .stack{grid-column:1;grid-row:3}
+  #play .pseat .hand{grid-column:2;grid-row:1/span 2;--cw:calc(var(--u)*28)}
+  #play .pseat .act{grid-column:2;grid-row:3}
+  #play .pseat .won,#play .pseat .hn{grid-column:1/-1}
+  #play .s-me .hand{--cw:calc(var(--u)*50)}
+  #play .avatar{width:calc(var(--u)*40);height:calc(var(--u)*40)}
+  #play .s-me{min-width:0;padding-inline:calc(var(--u)*8)}
+  #play .s-top{--fx:0px;--fy:90px}
+  #play .s-me{--fx:0px;--fy:-90px}
+  #play .s-left{--fx:190px;--fy:0px}
+  #play .s-right{--fx:-190px;--fy:0px}
+}
+
+/* Botones y paneles proporcionales (--k ≈ 1px en un móvil vertical de 360×780 o uno horizontal de 800×360) */
+:root{--k:min(.2083vw,.0962dvh)}
+@media (orientation:landscape) and (min-aspect-ratio:13/10){:root{--k:min(.0938vw,.2083dvh)}}
+#play .tool,#play .tool.only-land{min-height:calc(var(--k)*46);min-width:calc(var(--k)*40);font-size:max(8px,calc(var(--k)*10.5));border-radius:calc(var(--k)*14);gap:calc(var(--k)*3)}
+#play .tool i{font-size:max(14px,calc(var(--k)*20))}
+#play .meta{font-size:max(10px,calc(var(--k)*13))}
+#play .actions{padding:calc(var(--k)*12);gap:calc(var(--k)*8);border-radius:calc(var(--k)*18)}
+#play .actions h3{font-size:max(15px,calc(var(--k)*22))}
+#play .actions .muted,#play .status,#play .note{font-size:max(11px,calc(var(--k)*13))}
+#play .btns{gap:calc(var(--k)*8)}
+#play .btn{min-height:calc(var(--k)*58);border-radius:calc(var(--k)*16);font-size:max(11px,calc(var(--k)*15))}
+#play .btn .ic{font-size:max(12px,calc(var(--k)*16))}
+#play .btn .t{font-size:max(9px,calc(var(--k)*11))}
+#play .btn .v{font-size:max(14px,calc(var(--k)*21))}
+#play .quick{gap:calc(var(--k)*6)}
+#play .quick button{min-height:calc(var(--k)*36);padding:0 calc(var(--k)*14);font-size:max(10px,calc(var(--k)*12.5))}
+#play .rz{gap:calc(var(--k)*4)}
+#play .rz input[type=range]{height:calc(var(--k)*10);margin:calc(var(--k)*8) 0}
+#play .rz input[type=range]::-webkit-slider-thumb{width:calc(var(--k)*30);height:calc(var(--k)*30)}
+#play .rz input[type=range]::-moz-range-thumb{width:calc(var(--k)*26);height:calc(var(--k)*26)}
+#play .hint .hrow{font-size:max(11px,calc(var(--k)*14))}
+#play .hint .hl,#play .hint .sw{font-size:max(9px,calc(var(--k)*11))}
+@media (orientation:landscape) and (min-aspect-ratio:13/10){
+  #play .tool,#play .tool.only-land{min-height:calc(var(--k)*36);min-width:calc(var(--k)*40)}
+  #play .btn{min-height:calc(var(--k)*50)}
+  #play .actions{padding:calc(var(--k)*10)}
+}
+/* Versión (dorada) */
+.ver{display:inline-flex;align-items:baseline;color:var(--brass);font:700 11px/1 var(--f-body);letter-spacing:.08em;margin:1px 0 0;text-shadow:0 0 8px rgba(214,173,82,.35)}
+.mby{margin-bottom:6px!important}
+.ver.ver-m{display:flex;justify-content:center;width:100%;font-size:15px;margin:0 0 28px;color:var(--brass)}
+
+/* ===== Dominó ===== */
+.dt{--dw:var(--tw,26px);position:relative;display:inline-flex;flex-direction:column;flex:none;width:var(--dw);background:linear-gradient(160deg,#fbf7ea,#e6dcc0);border-radius:calc(var(--dw)*.2);box-shadow:inset 0 0 0 1px rgba(0,0,0,.2),0 2px 5px rgba(0,0,0,.5);color:var(--ink);user-select:none;-webkit-tap-highlight-color:transparent;transition:transform .15s,box-shadow .15s,filter .15s}
+.dt.h{flex-direction:row;width:auto;height:var(--dw)}
+.dt .hf{width:var(--dw);height:var(--dw);display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);padding:calc(var(--dw)*.15);box-sizing:border-box}
+.dt .hf i{display:block;width:80%;aspect-ratio:1;border-radius:50%;background:#1b1612;place-self:center;box-shadow:inset 0 1px 1px rgba(255,255,255,.22)}
+.dt .sp{flex:none;width:calc(100% - var(--dw)*.3);height:max(1.5px,calc(var(--dw)*.06));margin:0 auto;border-radius:2px;background:rgba(138,98,40,.7)}
+.dt.h .sp{width:max(1.5px,calc(var(--dw)*.06));height:calc(100% - var(--dw)*.3);margin:auto 0}
+.dt.endl,.dt.endr{box-shadow:inset 0 0 0 1px rgba(0,0,0,.2),0 0 0 2px var(--brass),0 2px 6px rgba(0,0,0,.5)}
+
+#play .arena.dm{display:flex;flex-direction:column;gap:6px;container-type:normal;aspect-ratio:auto;overflow:auto;padding:2px 0}
+.dopps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;flex:none}
+.dopp{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;border-radius:14px;background:rgba(0,0,0,.22);min-width:0;transition:opacity .2s}
+.dopp.ghost{background:none}
+.dopp .avatar{width:34px;height:34px;font-size:15px}
+.dopp .nm{max-width:100%}
+.dopp.turn .avatar,.dme.turn .avatar{border-color:var(--brass);box-shadow:0 0 0 3px rgba(214,173,82,.4)}
+.dopp.win .avatar{border-color:var(--brass);box-shadow:0 0 0 4px rgba(214,173,82,.5)}
+.dopp .act{min-height:14px;font-size:10.5px;text-align:center;line-height:1.3;color:var(--muted)}
+.dres{font-size:11px;font-weight:600;color:var(--brass);min-height:15px}
+.dbacks{display:flex;flex-wrap:wrap;justify-content:center;gap:2px;min-height:15px}
+.dtb{width:8px;height:15px;border-radius:2px;background:linear-gradient(180deg,#34281d,#15110d);box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
+
+.dtable{position:relative;flex:1 1 0;min-height:110px;margin:4px 6px;background:none;box-shadow:none;border-radius:0;display:flex;flex-direction:column;overflow:hidden}
+.dscroll{flex:1;min-height:0;overflow:auto;display:flex;align-items:flex-start;justify-content:center;padding:12px 10px 30px}
+.dchain{--tw:clamp(12px,4vw,17px);display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px;max-width:100%;margin:0 auto}
+.dempty{margin:0;color:var(--muted);font-size:13px;text-align:center}
+.dinfo{position:absolute;left:0;right:0;bottom:7px;display:flex;justify-content:space-between;gap:8px;padding:0 14px;font-size:12px;color:#cfe3d8;pointer-events:none}
+.dinfo b{color:var(--brass);font-variant-numeric:tabular-nums}
+
+.dme{display:flex;align-items:center;gap:10px;flex:none;padding:2px 8px}
+.dme .avatar{width:36px;height:36px;font-size:16px}
+.dme .dmi{display:flex;flex-direction:column;line-height:1.2}
+.dme .act{margin-left:auto;font-size:12px;color:var(--muted);text-align:right}
+.dme.turn .act{color:var(--brass);font-weight:600}
+.dhand{--tw:clamp(16px,5.5vw,24px);display:flex;flex-wrap:wrap;justify-content:center;gap:calc(var(--tw)*.22);padding:10px 4px 4px;flex:none}
+.dhand.many{--tw:clamp(14px,4.6vw,20px)}
+.dhand .dt.ok{box-shadow:inset 0 0 0 1px rgba(0,0,0,.2),0 0 0 2px var(--brass),0 0 12px rgba(214,173,82,.6),0 3px 6px rgba(0,0,0,.5);cursor:pointer;transform:translateY(-5px)}
+.dhand .dt.dim{filter:brightness(.55) saturate(.7)}
+.dhand .dt.sel{transform:translateY(-14px)}
+.btns.two{grid-template-columns:1fr 1fr}
+
+.fan>:nth-child(1){--a:-18deg}.fan>:nth-child(2){--a:-9deg}.fan>:nth-child(3){--a:0deg}.fan>:nth-child(4){--a:9deg}.fan>:nth-child(5){--a:18deg}
+.fan .dt{--tw:34px;margin-left:-8px;align-self:flex-start;margin-top:16px;transform-origin:50% 140%;transform:rotate(var(--a));animation:fanout .8s cubic-bezier(.2,.8,.2,1) both}
+.fan .card+.dt{margin-left:-14px}
+.mstep .mini{min-width:44px;justify-content:center}
+.gpick{display:grid;gap:12px;margin:12px 0}
+#mGames .note{margin:6px 0 0}
+#mGames .mstep{margin-top:18px}
+#guideDom{flex:1;min-height:0;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.guide .dex{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:8px 0 14px;--tw:22px}
+@media (prefers-reduced-motion:reduce){.fan .dt{animation:none}.dt{transition:none}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><span class="mark">🎲</span><span class="bt">Board Games<small>BY: Danilo</small><span class="ver">v1.0</span></span></div>
+    <nav class="tabs" aria-label="Secciones">
+      <button class="tab" data-act="menu">Inicio</button>
+      <button class="tab" id="tabPlay" data-act="tab-play" aria-selected="true">Jugar</button>
+      <button class="tab" id="tabGuide" data-act="tab-guide" aria-selected="false">Guía de reglas</button>
+    </nav>
+  </header>
+
+  <main>
+    <div id="play"></div>
+
+    <article id="guide" class="guide" hidden>
+      <h1>Guía de Texas Hold'em</h1>
+      <p class="lead">El póker más jugado del mundo. Aquí tienes lo necesario para sentarte a la mesa: el objetivo, cómo se desarrolla una mano, qué puedes hacer en tu turno, qué mano gana a cuál y las reglas concretas de este juego.</p>
+      <nav class="toc" aria-label="Índice de la guía">
+        <button data-act="goto" data-v="g-objetivo">Objetivo</button>
+        <button data-act="goto" data-v="g-material">Cartas</button>
+        <button data-act="goto" data-v="g-mano">Una mano paso a paso</button>
+        <button data-act="goto" data-v="g-acciones">Tus acciones</button>
+        <button data-act="goto" data-v="g-manos">Jerarquía de manos</button>
+        <button data-act="goto" data-v="g-empates">Empates</button>
+        <button data-act="goto" data-v="g-allin">All-in y botes laterales</button>
+        <button data-act="goto" data-v="g-mesa">Reglas de esta mesa</button>
+        <button data-act="goto" data-v="g-glosario">Glosario</button>
+        <button data-act="goto" data-v="g-consejos">Consejos</button>
+      </nav>
+
+      <section id="g-objetivo">
+        <h2>El objetivo</h2>
+        <p>Cada jugador intenta ganar fichas. Se gana el bote, que es el total de lo apostado en la mano, de dos maneras: porque todos los demás se retiran, o porque al final tienes la mejor mano de cinco cartas.</p>
+        <p>No siempre hace falta tener la mejor mano. Si apuestas con convicción y nadie se atreve a igualar, el bote es tuyo. Eso se llama farol.</p>
+      </section>
+
+      <section id="g-material">
+        <h2>Qué cartas se usan</h2>
+        <ul>
+          <li>Una baraja francesa de 52 cartas, sin comodines.</li>
+          <li>Cada jugador recibe 2 cartas privadas, sus cartas de mano.</li>
+          <li>En el centro de la mesa se colocan 5 cartas comunitarias que todos comparten: el tablero.</li>
+          <li>Tu mano final son las 5 mejores cartas que puedas formar con las tuyas y las del tablero. Puedes usar las dos de tu mano, solo una o ninguna.</li>
+          <li>De menor a mayor valor: 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A. El As también vale como 1 en la escalera A-2-3-4-5.</li>
+          <li>Los palos (♠ ♥ ♦ ♣) no tienen jerarquía entre sí.</li>
+        </ul>
+      </section>
+
+      <section id="g-mano">
+        <h2>Una mano paso a paso</h2>
+        <p>Antes de repartir se fijan las posiciones. El botón (D) marca al repartidor y avanza una silla en sentido horario después de cada mano. El jugador a su izquierda pone la ciega pequeña (SB, 10 fichas por defecto) y el siguiente la ciega grande (BB, 20 fichas por defecto). Son apuestas obligatorias que garantizan que siempre haya algo que ganar.</p>
+        <div class="stages">
+          <div class="st"><h3>Preflop</h3><div class="mb" data-n="0"></div><p>Cada jugador recibe 2 cartas boca abajo. Habla primero el jugador a la izquierda de la ciega grande. Puedes retirarte, igualar la ciega grande o subir. La ciega grande puede subir si nadie lo hizo antes.</p></div>
+          <div class="st"><h3>Flop</h3><div class="mb" data-n="3"></div><p>Se destapan 3 cartas comunitarias. Nueva ronda de apuestas, que empieza por el primer jugador activo a la izquierda del botón.</p></div>
+          <div class="st"><h3>Turn</h3><div class="mb" data-n="4"></div><p>Se destapa la cuarta carta comunitaria y hay otra ronda de apuestas.</p></div>
+          <div class="st"><h3>River</h3><div class="mb" data-n="5"></div><p>Se destapa la quinta y última carta. Es la última ronda de apuestas.</p></div>
+          <div class="st"><h3>Showdown</h3><div class="mb" data-n="5"></div><p>Los jugadores que siguen en la mano muestran sus cartas y la mejor combinación de cinco cartas se lleva el bote. Si todos menos uno se retiran, ese jugador gana sin mostrar nada.</p></div>
+        </div>
+        <p class="aside"><b>Nota</b>En un casino se descarta una carta antes del flop, del turn y del river para evitar trampas. Aquí ocurre de forma automática. En el showdown muestra primero quien hizo la última apuesta o subida; en este juego se muestran todas a la vez.</p>
+      </section>
+
+      <section id="g-acciones">
+        <h2>Tus acciones</h2>
+        <dl class="defs">
+          <dt>Retirarse (fold)</dt><dd>Tiras tus cartas y sales de la mano. Pierdes lo que ya habías puesto.</dd>
+          <dt>Pasar (check)</dt><dd>No apuestas nada y cedes el turno. Solo puedes pasar si nadie ha apostado en esa ronda.</dd>
+          <dt>Igualar (call)</dt><dd>Pones la misma cantidad que la apuesta actual para seguir en la mano.</dd>
+          <dt>Apostar (bet)</dt><dd>Haces la primera apuesta de una ronda. El mínimo es una ciega grande (20).</dd>
+          <dt>Subir (raise)</dt><dd>Aumentas la apuesta actual. Los demás deben igualar la nueva cifra o retirarse.</dd>
+          <dt>All-in</dt><dd>Apuestas todas tus fichas. Si no puedes cubrir una apuesta, igualas con lo que tienes y sigues en la mano.</dd>
+        </dl>
+        <p>Este juego es No-Limit: puedes apostar cualquier cantidad entre el mínimo y todas tus fichas. Una subida debe ser al menos tan grande como la apuesta o subida anterior de esa ronda. Por ejemplo, si alguien apuesta 40, tu subida mínima es a 80 (los 40 más otros 40).</p>
+        <p>Una ronda de apuestas termina cuando todos los jugadores que siguen en la mano, y que no están all-in, han actuado y han puesto la misma cantidad.</p>
+      </section>
+
+      <section id="g-manos">
+        <h2>Jerarquía de manos</h2>
+        <p>De la más fuerte (1) a la más débil (10). Las frecuencias son aproximadas y corresponden a las 7 cartas que tienes disponibles al final de la mano.</p>
+        <ol class="rks" id="rankList"></ol>
+      </section>
+
+      <section id="g-empates">
+        <h2>Empates y desempates</h2>
+        <ul>
+          <li>Si dos jugadores tienen la misma combinación, gana la de cartas más altas. Una pareja de Ases supera a una pareja de Reyes.</li>
+          <li>Si la combinación y las cartas principales coinciden, decide el kicker: la carta más alta de las que no forman la combinación.</li>
+          <li>Si las cinco cartas son equivalentes, hay empate y el bote se reparte a partes iguales. Pasa, por ejemplo, cuando la mejor mano está en el tablero.</li>
+          <li>Los palos nunca desempatan.</li>
+          <li>La escalera más baja es A-2-3-4-5 y la más alta es 10-J-Q-K-A. No se puede dar la vuelta: Q-K-A-2-3 no es escalera.</li>
+        </ul>
+        <div class="cmp">
+          <div class="ex" data-cards="A♦ 7♣ 4♠ 9♥ 2♣"><span class="lb">Tablero</span></div>
+          <div class="ex" data-cards="A♠ K♦"><span class="lb">Tu mano: pareja de Ases con kicker Rey</span></div>
+          <div class="ex" data-cards="A♥ Q♦"><span class="lb">Rival: pareja de Ases con kicker Reina. Ganas tú.</span></div>
+        </div>
+      </section>
+
+      <section id="g-allin">
+        <h2>All-in y botes laterales</h2>
+        <p>Un jugador all-in solo puede ganar de cada rival lo que él mismo puso. Lo que los demás sigan apostando va a un bote lateral en el que él no participa.</p>
+        <p>Ejemplo: Ana va all-in con 100. Beto y Carla ponen 300 cada uno. El bote principal es de 300 (100 de cada uno) y lo disputan los tres. El bote lateral es de 400 (200 de Beto y 200 de Carla) y lo disputan solo ellos dos. Si Ana tiene la mejor mano, gana 300 y Beto y Carla se juegan los otros 400.</p>
+        <p>La mesa calcula todos los botes automáticamente.</p>
+      </section>
+
+      <section id="g-mesa">
+        <h2>Reglas de esta mesa</h2>
+        <ul>
+          <li>Cuatro jugadores sentados alrededor de una mesa redonda: tú y tres rivales controlados por la computadora (Ernesto, Yamila y Rubén).</li>
+          <li>Cada uno empieza con un máximo de 1000 fichas. Puedes bajar tus fichas iniciales desde tu perfil. Las ciegas son 10 y 20 y no hay ante. En multijugador, el anfitrión puede cambiar el dinero inicial y las ciegas al crear la mesa.</li>
+          <li>Perfil: toca tu avatar o el botón Perfil para cambiar tu nombre y tu foto.</li>
+          <li>El botón avanza una silla en sentido horario cada mano. Quien se queda sin fichas queda eliminado.</li>
+          <li>La partida termina cuando te quedas sin fichas o eliminas a los tres rivales.</li>
+          <li>Con solo dos jugadores, el botón pone la ciega pequeña, habla primero antes del flop y último después.</li>
+          <li>Una subida all-in menor que la subida mínima no reabre las apuestas: quien ya había actuado solo puede igualar o retirarse.</li>
+          <li>Si dos manos empatan, el bote se divide. La ficha sobrante va al jugador más cercano a la izquierda del botón.</li>
+          <li>Las cartas de los rivales solo se ven en el showdown.</li>
+          <li>Controles: Retirarse, Pasar o Igualar, y Apostar o Subir con el deslizador y los atajos (mínimo, ½ bote, ¾, bote y all-in).</li>
+          <li>Ayuda de juego: muestra tu mejor combinación, una estimación de tu probabilidad de ganar (simulada con cartas al azar para los rivales) y la cuota del bote. Es orientativa y puedes desactivarla.</li>
+        </ul>
+      </section>
+
+      <section id="g-glosario">
+        <h2>Glosario</h2>
+        <dl class="defs">
+          <dt>Ciega</dt><dd>Apuesta obligatoria que se pone antes de repartir.</dd>
+          <dt>Botón</dt><dd>Ficha que marca al repartidor y fija el orden de actuación.</dd>
+          <dt>Posición</dt><dd>Tu lugar respecto al botón. Actuar tarde da ventaja porque ves lo que hicieron los demás.</dd>
+          <dt>Tablero</dt><dd>Las cartas comunitarias (board).</dd>
+          <dt>Kicker</dt><dd>Carta de desempate cuando dos jugadores tienen la misma combinación.</dd>
+          <dt>Nuts</dt><dd>La mejor mano posible con el tablero actual.</dd>
+          <dt>Proyecto (draw)</dt><dd>Mano incompleta que mejora con una carta concreta, como cuatro cartas de un mismo palo.</dd>
+          <dt>Outs</dt><dd>Las cartas que te completan el proyecto.</dd>
+          <dt>Farol (bluff)</dt><dd>Apostar con una mano débil para que los demás se retiren.</dd>
+          <dt>Cuota del bote</dt><dd>Relación entre lo que cuesta igualar y lo que puedes ganar (pot odds).</dd>
+          <dt>Suited</dt><dd>Dos cartas del mismo palo.</dd>
+          <dt>Heads-up</dt><dd>Mano entre solo dos jugadores.</dd>
+          <dt>Split pot</dt><dd>Bote repartido por empate.</dd>
+        </dl>
+      </section>
+
+      <section id="g-consejos">
+        <h2>Consejos para empezar</h2>
+        <ul>
+          <li>Juega menos manos de las que crees. Las mejores para empezar son las parejas, los Ases y las cartas altas conectadas o del mismo palo.</li>
+          <li>La posición vale mucho. Con las mismas cartas, actuar al final es mejor que actuar al principio.</li>
+          <li>Calcula la cuota. Si hay 60 en el bote (contando la apuesta del rival) e igualar cuesta 20, pagas 20 para ganar 60. Necesitas ganar al menos 20 / (60 + 20) = 25 % de las veces para que igualar compense.</li>
+          <li>Regla del 4 y el 2: multiplica tus outs por 4 en el flop (quedan dos cartas) o por 2 en el turn (queda una) para estimar tu probabilidad. Un proyecto de color tiene 9 outs: 9 × 4 ≈ 36 % en el flop.</li>
+          <li>No te cases con una pareja. Retirarse a tiempo también es una buena jugada.</li>
+          <li>Cuida tus fichas. Sobrevivir hasta tener una buena mano vale más que jugar todas.</li>
+        </ul>
+      </section>
+    </article>
+    <article id="guideDom" class="guide" hidden>
+      <h1>Guía del dominó</h1>
+      <p class="lead">El dominó clásico de doble seis. Aquí tienes las fichas, cómo se juega una mano, cómo termina y cómo se cuentan los puntos en esta mesa.</p>
+      <nav class="toc" aria-label="Índice de la guía del dominó">
+        <button data-act="goto" data-v="gd-objetivo">Objetivo</button>
+        <button data-act="goto" data-v="gd-fichas">Las fichas</button>
+        <button data-act="goto" data-v="gd-mano">Una mano paso a paso</button>
+        <button data-act="goto" data-v="gd-fin">Cómo termina una mano</button>
+        <button data-act="goto" data-v="gd-mesa">Reglas de esta mesa</button>
+        <button data-act="goto" data-v="gd-consejos">Consejos</button>
+      </nav>
+
+      <section id="gd-objetivo">
+        <h2>El objetivo</h2>
+        <p>Quedarte sin fichas antes que los demás. Cada mano que ganas suma puntos, y la partida la gana quien primero llegue a la meta (100 puntos por defecto; en multijugador el anfitrión elige 50, 100, 150 o 200).</p>
+      </section>
+
+      <section id="gd-fichas">
+        <h2>Las fichas</h2>
+        <ul>
+          <li>El juego tiene 28 fichas: todas las combinaciones de dos números del 0 (blanco) al 6.</li>
+          <li>Las fichas con el mismo número en las dos mitades se llaman dobles (por ejemplo 6-6) y se colocan atravesadas en la cadena.</li>
+          <li>Cada jugador recibe 7 fichas. Con 4 jugadores se reparten todas. Con 2 o 3 sobran fichas, que forman el pozo.</li>
+        </ul>
+      </section>
+
+      <section id="gd-mano">
+        <h2>Una mano paso a paso</h2>
+        <ul>
+          <li>Empieza quien tenga el doble más alto en la primera mano (normalmente el 6-6), y debe jugarlo. En las siguientes manos empieza quien ganó la anterior, con la ficha que quiera.</li>
+          <li>En tu turno colocas una ficha cuyo número coincida con uno de los dos extremos de la cadena. Las fichas que puedes jugar aparecen resaltadas.</li>
+          <li>Si una ficha encaja en los dos extremos, la tocas y eliges izquierda o derecha.</li>
+          <li>Si no tienes ninguna jugada y queda pozo, robas fichas hasta poder jugar. Si no queda pozo, pasas.</li>
+        </ul>
+      </section>
+
+      <section id="gd-fin">
+        <h2>Cómo termina una mano</h2>
+        <ul>
+          <li>Dominó: el primero que se queda sin fichas gana la mano y anota la suma de los puntos de las fichas que les quedan a los demás.</li>
+          <li>Tranque: si nadie puede jugar ni robar, gana quien tenga menos puntos en la mano y anota la suma de los puntos de los demás. Si hay empate en lo más bajo, nadie anota.</li>
+          <li>Los puntos de una ficha son la suma de sus dos mitades: el 4-2 vale 6 y el blanco doble vale 0.</li>
+        </ul>
+      </section>
+
+      <section id="gd-mesa">
+        <h2>Reglas de esta mesa</h2>
+        <ul>
+          <li>Cada jugador va por su cuenta, sin parejas.</li>
+          <li>Puedes jugar solo contra 1 a 3 bots, o en multijugador con hasta 4 jugadores. El anfitrión también puede añadir bots.</li>
+          <li>Si alguien sale de una mesa en línea, un bot juega en su lugar.</li>
+          <li>Si entras con la mano ya repartida y sobra un lugar, empiezas a jugar en la siguiente mano.</li>
+        </ul>
+      </section>
+
+      <section id="gd-consejos">
+        <h2>Consejos para empezar</h2>
+        <ul>
+          <li>Juega los dobles pronto: son difíciles de colocar más adelante.</li>
+          <li>Fíjate en los números que ya salieron. Si el 3 ya salió casi entero, quien lo necesite se quedará atascado.</li>
+          <li>Procura conservar variedad de números en la mano para tener siempre una jugada.</li>
+          <li>Deshazte pronto de las fichas altas: si hay tranque, cada punto que te quede cuenta.</li>
+        </ul>
+      </section>
+    </article>
+  </main>
+</div>
+
+<div class="sheet" id="sheetRank" hidden>
+  <div class="panel" role="dialog" aria-label="Manos de mayor a menor">
+    <h2>Manos de mayor a menor</h2>
+    <ol class="rks" id="sheetRankList"></ol>
+    <div class="row"><button class="mini" data-act="close">Cerrar</button></div>
+  </div>
+</div>
+
+<div class="sheet" id="sheetProfile" hidden>
+  <div class="panel" role="dialog" aria-label="Tu perfil">
+    <h2>Tu perfil</h2>
+    <div class="prof">
+      <div class="avatar big" id="profPrev"></div>
+      <div class="pf">
+        <label for="profName">Nombre</label>
+        <input type="text" id="profName" maxlength="14" autocomplete="off" placeholder="Tu nombre">
+        <div class="pair">
+          <label class="mini" for="profFile" style="letter-spacing:0;text-transform:none;font-size:13px;color:var(--text)">Elegir foto</label>
+          <input class="vh" type="file" id="profFile" accept="image/*">
+          <button class="mini" data-act="photo-clear">Quitar foto</button>
+        </div>
+      </div>
+    </div>
+    <div class="mcb">
+      <div class="mcrow"><span class="mct" id="mcT">Skin de Minecraft</span><label class="tgl"><input type="checkbox" id="mcOn" role="switch" aria-labelledby="mcT"></label></div>
+      <div class="pf" id="mcBox" hidden>
+        <div class="pair"><input type="text" id="mcUser" maxlength="16" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Usuario de Minecraft" aria-label="Usuario de Minecraft"><button class="mini" data-act="mc-import">Importar</button></div>
+        <div class="pair"><label class="mini" for="mcFile" style="letter-spacing:0;text-transform:none;font-size:13px;color:var(--text)">Subir archivo de skin (.png)</label><input class="vh" type="file" id="mcFile" accept="image/png"></div>
+        <p class="note" id="mcMsg"></p>
+      </div>
+    </div>
+    <div class="pf">
+      <label for="profChips">Fichas iniciales (máximo 1000)</label>
+      <input type="number" id="profChips" min="200" max="1000" step="100" inputmode="numeric">
+    </div>
+    <div class="pf"><label>Personalizar</label><div class="pair"><button class="mini" data-act="themes">🎨 Temas</button><button class="mini" data-act="chipmenu">🪙 Fichas</button></div></div>
+    <p class="note">Los temas y el estilo de fichas se guardan al instante. Las fichas iniciales se aplican cuando empiezas una partida nueva. El nombre y la foto se guardan en este dispositivo.</p>
+    <div class="row">
+      <button class="mini" data-act="close-profile">Cancelar</button>
+      <button class="mini" data-act="newgame-profile">Guardar y nueva partida</button>
+      <button class="btn raise" data-act="save-profile" style="min-height:40px;padding:0 18px">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="sheet" id="sheetThemes" hidden>
+  <div class="panel" role="dialog" aria-label="Temas">
+    <h2>Temas</h2>
+    <div class="pf"><label>Color del fondo</label><div class="swr"><span id="sw_bg" style="display:contents"></span><input type="color" data-thin="bg" aria-label="Color personalizado del fondo"></div><label>Color de la mesa</label><div class="swr"><span id="sw_felt" style="display:contents"></span><input type="color" data-thin="felt" aria-label="Color personalizado de la mesa"></div></div>
+    <p class="note">Los cambios se guardan al instante.</p>
+    <div class="row"><button class="btn raise" data-act="close-sheet" style="min-height:40px;padding:0 18px">Listo</button></div>
+  </div>
+</div>
+
+<div class="sheet" id="sheetChips" hidden>
+  <div class="panel" role="dialog" aria-label="Fichas">
+    <h2>Fichas</h2>
+    <div class="chipprev" aria-hidden="true"><i class="chip"></i><i class="chip"></i><i class="chip"></i><i class="chip"></i><i class="chip"></i></div>
+    <div class="pf"><label>Color de las fichas</label><div class="swr"><span id="sw_chip" style="display:contents"></span><input type="color" data-thin="chip" aria-label="Color personalizado de las fichas"></div></div>
+    <p class="note">Se ve en el bote y en las fichas que viajan por la mesa. Se guarda al instante.</p>
+    <div class="row"><button class="btn raise" data-act="close-sheet" style="min-height:40px;padding:0 18px">Listo</button></div>
+  </div>
+</div>
+
+<div id="menu" class="menu" role="dialog" aria-label="Menú principal">
+  <div class="mwrap">
+    <div id="mHome">
+      <div class="fan" id="mFan" aria-hidden="true"></div>
+      <h1 class="mtitle">Board Games</h1>
+      <p class="mby">BY: Danilo</p>
+      <p class="ver ver-m">v1.0</p>
+      <div class="mbtns">
+        <button class="mbtn" id="mResume" data-menu="resume" hidden><span class="mt">Continuar partida</span></button>
+        <button class="mbtn gold" data-menu="solo"><span class="mt">Jugar solo</span><span class="ms">Elige entre póker y dominó</span></button>
+        <button class="mbtn felt" data-menu="mp"><span class="mt">Multijugador</span><span class="ms" id="mMpSub">Crea una mesa o únete con un código</span></button>
+      </div>
+      <div class="msub"><button class="mini" data-menu="guide">Guía de póker</button><button class="mini" data-menu="guide-dom">Guía de dominó</button></div>
+    </div>
+    <div id="mMp" class="panel mpanel" hidden>
+      <div class="row"><button class="mini" data-menu="home">← Menú</button></div>
+      <h2>Multijugador</h2>
+      <div id="mpBody"></div>
+    </div>
+    <div id="mGames" class="panel mpanel" hidden>
+      <div class="row"><button class="mini" data-menu="home">← Menú</button></div>
+      <h2>Jugar solo</h2>
+      <p class="note">Elige el juego. Jugarás contra bots.</p>
+      <div class="gpick">
+        <button class="mbtn gold" data-menu="solo-poker"><span class="mt">Póker</span><span class="ms">Board Games contra bots</span></button>
+        <button class="mbtn felt" data-menu="solo-domino"><span class="mt">Dominó</span><span class="ms">Doble seis, hasta 100 puntos</span></button>
+      </div>
+      <div class="mstep"><button class="mini" data-menu="bd" aria-label="Menos bots">−</button><b id="mBots">3 bots</b><button class="mini" data-menu="bi" aria-label="Más bots">+</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="sheet" id="sheetChat" hidden><div class="panel" role="dialog" aria-label="Chat"><h2>Chat</h2><ul id="chatList" class="chatl"></ul><div class="chatrow"><input id="chatIn" maxlength="200" autocomplete="off" autocapitalize="sentences" placeholder="Escribe un mensaje…" enterkeyhint="send"><button class="btn raise" data-chat="send" style="min-height:44px;padding:0 16px">Enviar</button></div><div class="row"><button class="mini" data-chat="close">Cerrar</button></div></div></div>
+
+<div class="sheet" id="sheetOver" hidden>
+  <div class="panel over" role="dialog" aria-label="Fin de la partida">
+    <h2 id="overTitle"></h2>
+    <p id="overText"></p>
+    <button class="btn raise" data-act="newgame" style="min-width:200px">Nueva partida</button>
+    <div class="row" style="justify-content:center"><button class="mini" data-act="menu">Ir al menú</button></div>
+  </div>
+</div>
+
+<script>
+/*==ENGINE==*/
+const SUITS=['♠','♥','♦','♣'],SUIT_RED=[false,true,true,false];
+let SB=10,BB=20;
+let START=1000;
+const FACE={11:'J',12:'Q',13:'K',14:'A'};
+const rl=r=>FACE[r]||String(r);
+const PL={2:'Doses',3:'Treses',4:'Cuatros',5:'Cincos',6:'Seises',7:'Sietes',8:'Ochos',9:'Nueves',10:'Dieces',11:'Jotas',12:'Reinas',13:'Reyes',14:'Ases'};
+const SG={11:'Jota',12:'Reina',13:'Rey',14:'As'};
+const sg=r=>SG[r]||String(r);
+const ALL=[];
+for(let s=0;s<4;s++)for(let r=2;r<=14;r++)ALL.push({r:r,s:s,id:r*4+s});
+
+function takeCard(){
+  while(G.rig&&G.rig.length){const id=G.rig.shift(),i=G.deck.findIndex(c=>c.id===id);if(i>=0)return G.deck.splice(i,1)[0];}
+  return G.deck.pop();
+}
+function shuffle(){
+  const d=ALL.slice();
+  for(let i=d.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=d[i];d[i]=d[j];d[j]=t;}
+  return d;
+}
+function cmp(a,b){
+  const n=Math.max(a.length,b.length);
+  for(let i=0;i<n;i++){const d=(a[i]||0)-(b[i]||0);if(d)return d;}
+  return 0;
+}
+function eval5(c){
+  const r=c.map(x=>x.r).sort((a,b)=>b-a);
+  const flush=c.every(x=>x.s===c[0].s);
+  let sh=0;
+  if(new Set(r).size===5){
+    if(r[0]-r[4]===4)sh=r[0];
+    else if(r[0]===14&&r[1]===5&&r[2]===4&&r[3]===3&&r[4]===2)sh=5;
+  }
+  const cnt={};r.forEach(x=>{cnt[x]=(cnt[x]||0)+1;});
+  const g=Object.keys(cnt).map(k=>[cnt[k],+k]).sort((a,b)=>b[0]-a[0]||b[1]-a[1]);
+  const shape=g.map(x=>x[0]).join('');
+  const ks=g.map(x=>x[1]);
+  if(sh&&flush)return[8,sh];
+  if(shape==='41')return[7].concat(ks);
+  if(shape==='32')return[6].concat(ks);
+  if(flush)return[5].concat(r);
+  if(sh)return[4,sh];
+  if(shape==='311')return[3].concat(ks);
+  if(shape==='221')return[2].concat(ks);
+  if(shape==='2111')return[1].concat(ks);
+  return[0].concat(r);
+}
+const COMBO_CACHE={};
+function combos(n){
+  if(COMBO_CACHE[n])return COMBO_CACHE[n];
+  const out=[];
+  (function rec(start,cur){
+    if(cur.length===5){out.push(cur.slice());return;}
+    for(let i=start;i<n;i++){cur.push(i);rec(i+1,cur);cur.pop();}
+  })(0,[]);
+  COMBO_CACHE[n]=out;
+  return out;
+}
+function bestOf(cards){
+  let best=null,bc=null;
+  const cb=combos(cards.length);
+  for(let k=0;k<cb.length;k++){
+    const idx=cb[k];
+    const five=[cards[idx[0]],cards[idx[1]],cards[idx[2]],cards[idx[3]],cards[idx[4]]];
+    const sc=eval5(five);
+    if(!best||cmp(sc,best)>0){best=sc;bc=five;}
+  }
+  return{score:best,cards:bc};
+}
+function nameOf(s){
+  const c=s[0],a=s[1],b=s[2];
+  if(c===8)return a===14?'Escalera real':'Escalera de color al '+sg(a);
+  if(c===7)return'Póker de '+PL[a];
+  if(c===6)return'Full de '+PL[a]+' y '+PL[b];
+  if(c===5)return'Color al '+sg(a);
+  if(c===4)return'Escalera al '+sg(a);
+  if(c===3)return'Trío de '+PL[a];
+  if(c===2)return'Doble pareja de '+PL[a]+' y '+PL[b];
+  if(c===1)return'Pareja de '+PL[a];
+  return'Carta alta '+sg(a);
+}
+function shortName(s){
+  if(s[0]===8&&s[1]===14)return'Escalera real';
+  return['Carta alta','Pareja','Doble pareja','Trío','Escalera','Color','Full','Póker','Esc. de color'][s[0]];
+}
+function equity(hole,board,nOpp,sims){
+  const used=new Set(hole.concat(board).map(c=>c.id));
+  const rest=ALL.filter(c=>!used.has(c.id));
+  const need=nOpp*2+(5-board.length);
+  let score=0;
+  for(let s=0;s<sims;s++){
+    for(let k=0;k<need;k++){
+      const j=k+Math.floor(Math.random()*(rest.length-k));
+      const t=rest[k];rest[k]=rest[j];rest[j]=t;
+    }
+    const bd=board.concat(rest.slice(nOpp*2,need));
+    const me=bestOf(hole.concat(bd)).score;
+    let lost=false,ties=0;
+    for(let o=0;o<nOpp;o++){
+      const os=bestOf([rest[2*o],rest[2*o+1]].concat(bd)).score;
+      const c=cmp(me,os);
+      if(c<0){lost=true;break;}
+      if(c===0)ties++;
+    }
+    if(!lost)score+=1/(ties+1);
+  }
+  return score/sims;
+}
+
+/* Estado de la partida */
+const G={
+  players:[],dealer:0,board:[],deck:[],phase:'idle',currentBet:0,minRaise:BB,
+  turn:-1,turnActive:false,waiting:false,handNo:0,log:[],timer:null,result:null,over:null,
+  fresh:new Set(),lit:new Set(),help:true,ui:{},eq:null,eqPending:false,sbIdx:-1,bbIdx:-1,
+  profile:{name:'Tú',photo:'',chips:1000,mc:{on:false,head:'',user:''}}
+};
+G.crownKey='';try{G.crownKey=localStorage.getItem('poker.crown')||'';}catch(e){}
+const BOT_COLORS=['#7b3f2a','#2d5b73','#6a4a7c'],BOTN=['','Ernesto','Yamila','Rubén'];
+function goLobby(){
+  G.lobby=true;G.phase='idle';G.turnActive=false;G.waiting=false;G.turn=-1;G.board=[];G.result=null;G.currentBet=0;G.sbIdx=-1;G.bbIdx=-1;
+  G.players.forEach(p=>{p.hole=[];p.bet=0;p.total=0;p.last='';p.revealed=false;p.won=0;p.best=null;p.handName='';if(p.empty){p.out=true;p.folded=true;}});
+  G.players[0].folded=false;G.players[0].out=false;
+  render();
+}
+function mk(i,name,human,tight,aggr){
+  return{key:i===0?'host':'b'+i,crown:false,idx:i,name:name,human:human,tight:tight,aggr:aggr,photo:'',color:human?'#3a2416':BOT_COLORS[(i-1)%3],chips:START,hole:[],bet:0,total:0,folded:false,allIn:false,acted:false,locked:false,out:false,last:'',handName:'',revealed:false,won:0,best:null};
+}
+function log(m){G.log.unshift(m);if(G.log.length>80)G.log.pop();}
+function nm(p){return p.human&&!NET.on?'Tú':p.name;}
+function W(p,third,second){return p.human&&!NET.on?'Tú '+second:p.name+' '+third;}
+function cs(c){return rl(c.r)+SUITS[c.s];}
+function dly(ms){return G.players[0]&&G.players[0].folded?ms*.3:ms;}
+function potTotal(){return G.players.reduce((s,p)=>s+p.total,0);}
+function nextIdx(from,pred){
+  const n=G.players.length;
+  for(let k=1;k<=n;k++){const i=(from+k)%n;if(pred(G.players[i]))return i;}
+  return -1;
+}
+function needs(p){return !p.folded&&!p.allIn&&(!p.acted||p.bet<G.currentBet);}
+function nextToAct(from){return nextIdx(from,needs);}
+function roundOver(){
+  const a=G.players.filter(p=>!p.folded&&!p.allIn);
+  if(a.length===0)return true;
+  if(a.length===1&&a[0].bet>=G.currentBet)return true;
+  return a.every(p=>p.acted&&p.bet===G.currentBet);
+}
+function commit(p,amt){
+  amt=Math.max(0,Math.min(amt,p.chips));
+  p.chips-=amt;p.bet+=amt;p.total+=amt;
+  if(p.chips===0)p.allIn=true;
+  return amt;
+}
+function turnInfo(p){
+  const owe=Math.max(0,G.currentBet-p.bet);
+  const toCall=Math.min(owe,p.chips);
+  const canRaise=!p.locked&&p.chips>owe;
+  const maxTo=p.bet+p.chips;
+  let minTo=G.currentBet+G.minRaise;
+  if(minTo>maxTo)minTo=maxTo;
+  return{owe:owe,toCall:toCall,canRaise:canRaise,minTo:minTo,maxTo:maxTo};
+}
+
+function newGame(hold){
+  if(NET.role==='guest')return;
+  clearTimeout(G.timer);clearTimeout(D.timer);CUR='poker';NET.game='poker';
+  const rm=!!(hold||NET.room);
+  START=rm?ROOM.chips:Math.max(200,Math.min(1000,Math.round((+G.profile.chips||1000)/10)*10));
+  if(rm){SB=BLINDS[ROOM.blind][0];BB=BLINDS[ROOM.blind][1];}else{SB=10;BB=20;}
+  G.players=[mk(0,G.profile.name||'Tú',true,1,.4),mk(1,'Ernesto',false,1.05,.45),mk(2,'Yamila',false,.9,.65),mk(3,'Rubén',false,1.2,.3)];
+  G.players[0].photo=effPhoto();NET.seat();NET.fill();G.lobby=false;
+  G.players.forEach(p=>{p.crown=!!G.crownKey&&!p.empty&&p.key===G.crownKey;});
+  G.dealer=Math.floor(Math.random()*4);
+  G.handNo=0;G.log=[];G.over=null;G.result=null;G.rig=[];
+  MENU.hasGame=true;
+  if(hold){G.hold=true;goLobby();return;}
+  G.hold=false;MENU.hide();
+  startHand();
+}
+function endGame(win){
+  const w=G.players.filter(p=>p.chips>0).sort((a,b)=>b.chips-a.chips)[0];
+  G.over={win:win,ci:w?w.idx:-1,crown:w?w.name:'',crownMe:!!w&&w.idx===0};
+  if(w){G.crownKey=w.key||'';try{localStorage.setItem('poker.crown',G.crownKey);}catch(e){}}
+  render();
+}
+function startHand(){
+  if(NET.role==='guest')return;
+  clearTimeout(G.timer);
+  G.result=null;G.waiting=false;G.turnActive=false;
+  G.players.forEach(p=>{if(p.gone){p.gone=false;p.crown=false;p.empty=true;p.chips=0;p.photo='';p.name=BOTN[p.idx];}});
+  const alive=G.players.filter(p=>p.chips>0);
+  if(alive.length<=1&&G.players[0].chips>0&&G.players.slice(1).every(p=>p.empty)){goLobby();return;}
+  if(G.players[0].chips<=0&&!NET.on){endGame(false);return;}
+  if(alive.length<=1){endGame(G.players[0].chips>0);return;}
+  G.players.forEach(p=>{
+    p.out=p.chips<=0;p.hole=[];p.bet=0;p.total=0;p.folded=p.out;p.allIn=false;p.acted=false;p.locked=false;
+    p.last='';p.handName='';p.revealed=false;p.won=0;p.best=null;
+  });
+  G.handNo++;G.board=[];G.deck=shuffle();G.lit=new Set();G.fresh=new Set();
+  const notOut=p=>!p.out;
+  G.dealer=nextIdx(G.dealer,notOut);
+  for(let k=0;k<2;k++)G.players.forEach(p=>{if(!p.out){const c=G.deck.pop();p.hole.push(c);G.fresh.add(c.id);}});
+  let sb,bb,first;
+  if(alive.length===2){sb=G.dealer;bb=nextIdx(sb,notOut);first=sb;}
+  else{sb=nextIdx(G.dealer,notOut);bb=nextIdx(sb,notOut);first=nextIdx(bb,notOut);}
+  G.sbIdx=sb;G.bbIdx=bb;
+  commit(G.players[sb],SB);commit(G.players[bb],BB);
+  G.players[sb].last='SB '+G.players[sb].bet;
+  G.players[bb].last='BB '+G.players[bb].bet;
+  G.currentBet=BB;G.minRaise=BB;G.phase='preflop';
+  log('Mano '+G.handNo+': el botón lo tiene '+nm(G.players[G.dealer]));
+  const n=G.players.length;
+  G.turn=(first+n-1)%n;
+  if(roundOver()){render();G.timer=setTimeout(endRound,dly(900));return;}
+  G.turn=nextToAct(G.turn);
+  promptTurn();
+}
+function promptTurn(){
+  G.turnActive=true;
+  const p=G.players[G.turn];
+  if(p.human){
+    G.waiting=true;
+    const t=turnInfo(p);
+    G.ui=Object.assign({},t,{raiseTo:t.minTo});
+    G.eq=null;G.eqPending=false;
+    render();
+    return;
+  }
+  G.waiting=false;
+  render();
+  if(p.rem)return;
+  const who=G.turn;
+  G.timer=setTimeout(()=>botAct(who),dly(600+Math.random()*700)+(G.fresh.size?Math.min(1100,G.fresh.size*140+450):0));
+}
+function botAct(i){
+  if(G.turn!==i||!G.turnActive)return;
+  const p=G.players[i];
+  const t=turnInfo(p);
+  const opps=G.players.filter(q=>q!==p&&!q.folded).length;
+  const pot=potTotal();
+  const eq=equity(p.hole,G.board,opps,130);
+  const fair=1/(opps+1);
+  const s=eq+(Math.random()-.5)*.08;
+  const tb=fair+(1-fair)*.30*p.tight;
+  const tr=fair+(1-fair)*.45*p.tight;
+  const bluff=Math.random()<.07*(p.aggr/.45);
+  const frac=Math.min(1,Math.max(.4,.4+(s-fair)*.9));
+  const size=function(f){
+    let to=G.currentBet+f*(pot+t.toCall);
+    to=Math.round(to/10)*10;
+    to=Math.max(to,t.minTo);
+    if(to-p.bet>p.chips*.65)to=t.maxTo;
+    return Math.min(to,t.maxTo);
+  };
+  if(t.owe===0){
+    if(t.canRaise&&(s>tb||bluff))return act(i,'raise',size(frac));
+    return act(i,'call');
+  }
+  const potOdds=t.toCall/(pot+t.toCall);
+  if(t.canRaise&&s>tr&&Math.random()<.35+p.aggr*.6)return act(i,'raise',size(frac));
+  if(s>potOdds*(.9+.2*p.tight)+.03)return act(i,'call');
+  if(t.canRaise&&bluff&&t.toCall<=pot*.4)return act(i,'raise',size(.7));
+  return act(i,'fold');
+}
+function act(i,type,raiseTo){
+  if(NET.role==='guest'){sfx(type==='raise'?'raise':(type==='call'?(G.ui&&G.ui.owe>0?'call':'check'):''));NET.send({t:'act',type:type,raiseTo:raiseTo});G.waiting=false;G.turnActive=false;NET.r();return;}
+  const p=G.players[i];
+  clearTimeout(G.timer);
+  G.waiting=false;G.turnActive=false;
+  const owe=Math.max(0,G.currentBet-p.bet);
+  if(type==='raise'&&(raiseTo<=G.currentBet||p.chips<=owe))type='call';
+  if(type==='fold'){
+    p.folded=true;p.last='Se retira';
+    log(W(p,'se retira','te retiras'));
+  }else if(type==='call'){
+    const amt=commit(p,owe);p.acted=true;
+    if(owe===0){p.last='Pasa';log(W(p,'pasa','pasas'));}
+    else if(p.allIn){p.last='All-in '+p.bet;log(W(p,'iguala y queda all-in ('+amt+')','igualas y quedas all-in ('+amt+')'));}
+    else{p.last='Iguala '+amt;log(W(p,'iguala '+amt,'igualas '+amt));}
+  }else{
+    const to=Math.min(raiseTo,p.bet+p.chips);
+    const wasBet=G.currentBet===0;
+    commit(p,to-p.bet);
+    const size=to-G.currentBet;
+    const full=size>=G.minRaise;
+    G.currentBet=to;
+    G.players.forEach(q=>{
+      if(q!==p&&!q.folded&&!q.allIn){
+        if(full){q.acted=false;q.locked=false;}
+        else if(q.acted){q.acted=false;q.locked=true;}
+      }
+    });
+    if(full)G.minRaise=size;
+    p.acted=true;
+    if(p.allIn){p.last='All-in '+to;log(W(p,'va all-in con '+to,'vas all-in con '+to));}
+    else{
+      p.last=(wasBet?'Apuesta ':'Sube a ')+to;
+      log(W(p,(wasBet?'apuesta ':'sube a ')+to,(wasBet?'apuestas ':'subes a ')+to));
+    }
+  }
+  sfx(type==='raise'?(p.allIn?'allin':'raise'):(type==='call'?(owe>0?(p.allIn?'allin':'call'):'check'):''));
+  afterAction(i);
+}
+function afterAction(i){
+  const alive=G.players.filter(p=>!p.folded);
+  if(alive.length===1){render();G.timer=setTimeout(()=>finishUncontested(alive[0]),dly(600));return;}
+  if(roundOver()){render();G.timer=setTimeout(endRound,dly(700));return;}
+  G.turn=nextToAct(i);
+  promptTurn();
+}
+function endRound(){
+  G.players.forEach(p=>{
+    p.bet=0;p.acted=false;p.locked=false;
+    if(!p.folded&&!p.allIn)p.last='';
+  });
+  G.currentBet=0;G.minRaise=BB;
+  const order=['preflop','flop','turn','river','showdown'];
+  const nxt=order[order.indexOf(G.phase)+1];
+  G.phase=nxt;
+  G.fresh=new Set();
+  if(nxt==='showdown'){render();G.timer=setTimeout(showdown,dly(800));return;}
+  G.deck.pop();
+  const k=nxt==='flop'?3:1;
+  for(let n=0;n<k;n++){const c=takeCard();G.board.push(c);G.fresh.add(c.id);}
+  log((nxt==='flop'?'Flop':nxt==='turn'?'Turn':'River')+': '+G.board.map(cs).join(' '));
+  const canBet=G.players.filter(p=>!p.folded&&!p.allIn).length>=2;
+  if(!canBet){render();G.timer=setTimeout(endRound,dly(1300));return;}
+  G.turn=nextToAct(G.dealer);
+  promptTurn();
+}
+function buildPots(){
+  const ps=G.players;
+  const levels=Array.from(new Set(ps.filter(p=>!p.folded&&p.total>0).map(p=>p.total))).sort((a,b)=>a-b);
+  const pots=[];let prev=0;
+  levels.forEach(l=>{
+    let amount=0;
+    ps.forEach(p=>{amount+=Math.max(0,Math.min(p.total,l)-prev);});
+    const eligible=ps.filter(p=>!p.folded&&p.total>=l);
+    if(amount>0)pots.push({amount:amount,eligible:eligible});
+    prev=l;
+  });
+  return pots;
+}
+function showdown(){
+  G.phase='showdown';
+  G.fresh=new Set();
+  const live=G.players.filter(p=>!p.folded);
+  live.forEach(p=>{
+    p.best=bestOf(p.hole.concat(G.board));
+    p.handName=nameOf(p.best.score);
+    p.revealed=true;
+    p.hole.forEach(c=>G.fresh.add(c.id));
+  });
+  settle();
+}
+function settle(){
+  const n=G.players.length;
+  const pots=buildPots();
+  const wins=new Map();
+  pots.forEach(pot=>{
+    let top=null,ws=[];
+    pot.eligible.forEach(p=>{
+      const sc=p.best.score;
+      if(!top||cmp(sc,top)>0){top=sc;ws=[p];}
+      else if(cmp(sc,top)===0)ws.push(p);
+    });
+    ws.sort((a,b)=>((a.idx-G.dealer-1+n)%n)-((b.idx-G.dealer-1+n)%n));
+    const share=Math.floor(pot.amount/ws.length);
+    let rem=pot.amount-share*ws.length;
+    ws.forEach(p=>{
+      let a=share;if(rem>0){a++;rem--;}
+      p.chips+=a;
+      wins.set(p,(wins.get(p)||0)+a);
+    });
+  });
+  const parts=[];
+  wins.forEach((a,p)=>{
+    p.won=a;
+    p.best.cards.forEach(c=>G.lit.add(c.id));
+    parts.push(nm(p)+' +'+a+' ('+p.handName+')');
+  });
+  const me=G.players[0];
+  const headline=wins.has(me)?'¡Ganas la mano!':(me.folded?'Mano terminada':'Pierdes la mano');
+  G.result={headline:headline,detail:parts.join(' · '),uncontested:false};
+  log('Showdown: '+parts.join(' · '));
+  G.turnActive=false;G.waiting=false;
+  render();
+}
+function finishUncontested(w){
+  const pot=potTotal();
+  w.chips+=pot;w.won=pot;
+  G.phase='fin';
+  const me=G.players[0];
+  G.result={
+    headline:w===me?'¡Ganas la mano!':(me.folded?'Mano terminada':'Pierdes la mano'),
+    detail:nm(w)+' +'+pot+' (todos se retiraron)',
+    uncontested:true
+  };
+  log((nm(w)+(w.human&&!NET.on?' ganas ':' gana '))+pot+' porque todos se retiraron');
+  G.turnActive=false;G.waiting=false;
+  render();
+}
+
+/*==UI==*/
+const $=s=>document.querySelector(s);
+const playEl=$('#play');
+let freshTimer=null;
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+/*==ANIMACIONES==*/
+const ANIM=new Set();let NEWK=[],LASTHAND=-1,LASTPOT=0,LASTTOT={},LASTRES=0;
+const RM=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches);
+function newAnim(key,cond){if(cond&&!ANIM.has(key)){NEWK.push(key);return true;}return false;}
+function dealDl(p,k){return (k*4+(((p.idx-G.dealer+3)%4)+4)%4)*75;}
+function moveChips(a,b,n){
+  const ra=a.getBoundingClientRect(),rb=b.getBoundingClientRect();
+  const x0=ra.left+ra.width/2,y0=ra.top+ra.height/2,x1=rb.left+rb.width/2,y1=rb.top+rb.height/2;
+  for(let k=0;k<n;k++){
+    const c=document.createElement('i');c.className='chip';
+    c.style.cssText='position:fixed;left:'+(x0-8)+'px;top:'+(y0-8)+'px;width:16px;height:16px;z-index:45;pointer-events:none';
+    document.body.appendChild(c);
+    const dx=x1-x0+(Math.random()-.5)*14,dy=y1-y0+(Math.random()-.5)*14;
+    const an=c.animate([
+      {transform:'translate(0,0) scale(.8)',opacity:0},
+      {opacity:1,offset:.12},
+      {transform:'translate('+dx+'px,'+dy+'px) scale(1)',opacity:1,offset:.85},
+      {transform:'translate('+dx+'px,'+dy+'px) scale(.7)',opacity:0}
+    ],{duration:640,delay:k*90,easing:'cubic-bezier(.3,.7,.3,1)',fill:'both'});
+    an.onfinish=()=>c.remove();
+  }
+}
+function flyChips(){
+  const tot={};G.players.forEach((p,i)=>{tot[i]=p.total;});
+  const hidden=playEl.hidden||(typeof MENU!=='undefined'&&!MENU.el.hidden);
+  if(!RM&&!hidden){
+    const pot=playEl.querySelector('.pot .chip');
+    if(pot){
+      G.players.forEach((p,i)=>{
+        const d=p.total-(LASTTOT[i]||0);
+        if(d>0){const av=playEl.querySelector('.pseat[data-i="'+i+'"] .avatar');if(av)moveChips(av,pot,Math.min(4,1+Math.floor(d/(BB*2))));}
+      });
+      if(G.result&&G.handNo!==LASTRES){
+        LASTRES=G.handNo;
+        G.players.forEach((p,i)=>{if(p.won>0){const av=playEl.querySelector('.pseat[data-i="'+i+'"] .avatar');if(av)moveChips(pot,av,4);}});
+      }
+    }
+  }
+  LASTTOT=tot;
+}
+function cardHTML(c,o){
+  o=o||{};
+  const red=SUIT_RED[c.s],sym=SUITS[c.s]+'︎';
+  return '<div class="card'+(red?' red':'')+(o.fresh?' fresh':'')+(o.dim?' dim':'')+(o.lit?' lit':'')+'"'+(o.dl?' style="--dl:'+o.dl+'ms"':'')+'><span class="cr">'+rl(c.r)+'</span><span class="cs">'+sym+'</span><span class="cc">'+sym+'</span></div>';
+}
+function backHTML(fresh,dl){return '<div class="card back'+(fresh?' fresh':'')+'"'+(fresh&&dl?' style="--dl:'+dl+'ms"':'')+'></div>';}
+function faceHTML(c,dl){
+  const shown=G.result&&!G.result.uncontested;
+  const fr=newAnim('f:'+c.id,G.fresh.has(c.id));
+  return cardHTML(c,{fresh:fr,dl:fr?dl:0,dim:shown&&!G.lit.has(c.id),lit:shown&&G.lit.has(c.id)});
+}
+function actKind(t){t=String(t||'');return /^Iguala/.test(t)?'call':/^(Sube|Apuesta)/.test(t)?'raise':/^All-in/.test(t)?'allin':/^Pasa/.test(t)?'check':/^Se retira/.test(t)?'fold':'';}
+function actHTML(t){const k=actKind(t);return k?'<span class="a-'+k+'">'+esc(t)+'</span>':esc(t);}
+function logCls(m){return /all-in/i.test(m)?'a-allin':/\b(iguala|igualas)\b/i.test(m)?'a-call':/\b(sube|subes|apuesta|apuestas)\b/i.test(m)?'a-raise':/se retira|te retiras/i.test(m)?'a-fold':'';}
+function avatarInner(p){
+  if(p.photo&&p.photo.indexOf('data:image/')===0)return '<img'+(p.photo.indexOf('data:image/png')===0?' class="px"':'')+' src="'+p.photo+'" alt="">';
+  return '<span>'+esc((p.name||'?').charAt(0).toUpperCase())+'</span>';
+}
+function badgesHTML(i){
+  if(G.phase==='idle')return '';
+  let h='';
+  if(i===G.dealer)h+='<span class="badge d" title="Botón del repartidor">D</span>';
+  if(i===G.sbIdx)h+='<span class="badge" title="Ciega pequeña">SB</span>';
+  if(i===G.bbIdx)h+='<span class="badge" title="Ciega grande">BB</span>';
+  return h?'<div class="badges">'+h+'</div>':'';
+}
+function chairHTML(p,rot){
+  const bg=p.photo?'#000':p.color;
+  const av=p.human
+    ?'<button class="avatar" data-act="profile" aria-label="Editar perfil" style="background:'+bg+'">'+avatarInner(p)+'</button>'
+    :'<div class="avatar" style="background:'+bg+'">'+avatarInner(p)+'</div>';
+  return '<div class="chairwrap">'+(p.crown?'<span class="crown" title="Ganó la partida anterior">👑</span>':'')+'<span class="chair" style="--rot:'+rot+'deg"></span>'+av+badgesHTML(p.idx)+'</div>';
+}
+function seatState(p){
+  const turn=G.turnActive&&G.turn===p.idx;
+  const cls=[];
+  if(turn)cls.push('turn');
+  if(p.out)cls.push('out');else if(p.folded)cls.push('folded');
+  if(G.result&&p.won>0)cls.push('win');
+  return{turn:turn,cls:cls.join(' ')};
+}
+function extraHTML(p){
+  return (G.result&&p.won>0?'<div class="won">+'+p.won+'</div>':'')+(p.revealed&&p.best?'<div class="hn">'+shortName(p.best.score)+'</div>':'');
+}
+function seatHTML(p,pos,rot){
+  const st=seatState(p);
+  let hand='';
+  if(!p.out)hand=p.hole.map((c,k)=>p.revealed?faceHTML(c,k*140):backHTML(newAnim('b:'+p.idx+':'+k,G.fresh.has(c.id)||(NET.role==='guest'&&G.phase==='preflop')),dealDl(p,k))).join('');
+  let act;
+  if(p.out)act=p.empty?'Vacío':'Eliminado';
+  else if(st.turn)act='Pensando<span class="dots"><i></i><i></i><i></i></span>';
+  else act=actHTML(p.last);
+  return '<div class="pseat '+pos+' '+st.cls+'" data-i="'+p.idx+'">'+chairHTML(p,rot)+'<div class="nm">'+esc(p.name)+'</div><div class="stack">'+(p.empty?'':p.chips)+'</div><div class="hand">'+hand+'</div><div class="act">'+act+'</div>'+extraHTML(p)+'</div>';
+}
+function meHTML(){
+  const p=G.players[0];
+  const st=seatState(p);
+  const cards=p.hole.map((c,k)=>faceHTML(c,dealDl(p,k))).join('');
+  const act=st.turn?'Tu turno':actHTML(p.last);
+  return '<div class="pseat s-me '+st.cls+'" data-i="0"><div class="hand">'+cards+'</div>'+chairHTML(p,180)+'<div class="nm">'+esc(p.name)+'</div><div class="stack">'+p.chips+'</div><div class="act">'+act+'</div>'+extraHTML(p)+'</div>';
+}
+function midHTML(){
+  const shown=G.result&&!G.result.uncontested;
+  let slots='';
+  let fi=0;
+  for(let k=0;k<5;k++){
+    const c=G.board[k];
+    if(c){const fr=newAnim('c:'+c.id,G.fresh.has(c.id));slots+=cardHTML(c,{fresh:fr,dl:fr?(fi++)*140:0,dim:shown&&!G.lit.has(c.id),lit:shown&&G.lit.has(c.id)});}
+    else slots+='<div class="slot"></div>';
+  }
+  const names={preflop:'Preflop',flop:'Flop',turn:'Turn',river:'River',showdown:'Showdown',fin:'Fin de la mano'};
+  return '<div class="mid"><div class="phase">'+(names[G.phase]||'')+'</div><div class="board">'+slots+'</div>'+
+    '<div class="pot"><i class="chip" style="width:20px;height:20px"></i><span'+(potTotal()!==LASTPOT?' class="bump"':'')+'>'+potTotal()+'</span><small>Bote</small></div></div>';
+}
+function raiseLabel(){
+  const v=G.ui.raiseTo;
+  return v>=G.ui.maxTo?'All-in '+v:(G.currentBet===0?'Apostar ':'Subir a ')+v;
+}
+function sliderIdx(v){
+  const t=G.ui,N=Math.ceil((t.maxTo-t.minTo)/10);
+  return v>=t.maxTo?N:Math.min(N,Math.max(0,Math.round((v-t.minTo)/10)));
+}
+function raiseInner(){
+  const v=G.ui.raiseTo,all=v>=G.ui.maxTo;
+  return '<b class="ic">'+(all?'🔥':'▲')+'</b><span class="t">'+(all?'All-in':(G.currentBet===0?'Apostar':'Subir a'))+'</span><span class="v">'+v+'</span>';
+}
+function controlsHTML(){
+  const t=G.ui,p=G.players[0];
+  const callIn=t.owe===0?'<b class="ic">✓</b><span class="t">Pasar</span>':(t.toCall>=p.chips?'<b class="ic">🔥</b><span class="t">All-in</span><span class="v">'+t.toCall+'</span>':'<b class="ic">✓</b><span class="t">Igualar</span><span class="v">'+t.toCall+'</span>');
+  let h='<div class="btns">'+
+    '<button class="btn fold" data-act="fold"'+(t.owe===0?' disabled title="Pasar es gratis"':'')+'><b class="ic">✕</b><span class="t">Retirarse</span></button>'+
+    '<button class="btn call" data-act="call">'+callIn+'</button>'+
+    '<button class="btn raise" id="bRaise" data-act="raise"'+(t.canRaise?'':' disabled')+'>'+(t.canRaise?raiseInner():'<b class="ic">▲</b><span class="t">Subir</span>')+'</button></div>';
+  if(t.canRaise&&t.maxTo>t.minTo){
+    const N=Math.ceil((t.maxTo-t.minTo)/10);
+    h+='<div class="rz"><input type="range" id="sl" min="0" max="'+N+'" step="1" value="'+sliderIdx(t.raiseTo)+'" aria-label="Cantidad a apostar">'+
+      '<div class="quick"><button data-act="q" data-v="min">Mín</button><button data-act="q" data-v="0.5">½ bote</button><button data-act="q" data-v="0.75">¾ bote</button><button data-act="q" data-v="1">Bote</button><button data-act="q" data-v="max">All-in</button></div></div>';
+  }else if(!t.canRaise&&p.chips>t.owe){
+    h+='<p class="note">Una subida all-in menor que la mínima no reabre las apuestas. Solo puedes igualar o retirarte.</p>';
+  }
+  return h;
+}
+function actionsHTML(){
+  if(G.over)return '<section class="actions"><p class="status">Partida terminada.</p></section>';
+  if(G.lobby)return '<section class="actions"><h3>Esperando jugadores…</h3>'+(NET.room?'<p class="muted">Código de la mesa: <b>'+esc(NET.code)+'</b>. La partida empieza cuando entre alguien.</p><button class="btn raise" data-act="mp">Compartir mesa</button>':'<p class="muted">Estás solo en la mesa. Invita a alguien o añade bots.</p><button class="btn raise" data-act="mp">Invitar jugadores</button>')+'</section>';
+  if(G.result&&NET.role==='guest')return '<section class="actions"><h3>'+G.result.headline+'</h3><p class="muted">'+esc(G.result.detail)+'</p><p class="status">Esperando al anfitrión…</p></section>';
+  if(G.result){
+    const alive=G.players.filter(p=>p.chips>0).length;
+    const end=G.players[0].chips<=0||alive<=1;
+    return '<section class="actions"><h3>'+G.result.headline+'</h3><p class="muted">'+esc(G.result.detail)+'</p>'+
+      '<button class="btn raise" data-act="next">'+(end?'Ver resultado':'Siguiente mano ▶')+'</button></section>';
+  }
+  if(G.waiting&&G.turn===0)return '<section class="actions mine">'+controlsHTML()+'</section>';
+  let msg='Repartiendo…';
+  if(G.turnActive&&G.turn>=0)msg=G.players[G.turn].human?'Tu turno':'Turno de '+esc(G.players[G.turn].name);
+  else if(G.phase==='showdown')msg='Mostrando cartas…';
+  return '<section class="actions"><p class="status">'+msg+'</p></section>';
+}
+function startDesc(h){
+  const a=h[0],b=h[1];
+  if(a.r===b.r)return 'Pareja de '+PL[a.r];
+  const hi=Math.max(a.r,b.r),lo=Math.min(a.r,b.r);
+  return rl(hi)+' '+rl(lo)+(a.s===b.s?' del mismo palo':' de distinto palo');
+}
+function hintBodyHTML(){
+  const me=G.players[0];
+  if(!G.help)return '<p class="small muted">Ayuda desactivada.</p>';
+  if(me.folded&&!G.result)return '<p class="small muted">Te retiraste de esta mano.</p>';
+  if(!(G.waiting&&G.turn===0))return '<p class="small muted">Aquí verás tu mejor mano y tus probabilidades cuando sea tu turno.</p>';
+  const t=G.ui;
+  const name=G.board.length>=3?nameOf(bestOf(me.hole.concat(G.board)).score):startDesc(me.hole);
+  const pot=potTotal();
+  const need=t.owe>0?Math.round(100*t.toCall/(pot+t.toCall)):null;
+  const pct=G.eq==null?null:Math.round(G.eq*100);
+  let h='<div class="hrow"><span style="color:var(--text)">'+name+'</span><span>'+(pct==null?'Calculando…':'Ganas ≈ '+pct+' %')+'</span></div>';
+  h+='<div class="meter">'+(pct==null?'':'<i style="width:'+pct+'%"></i>')+(need==null?'':'<b style="left:'+need+'%" title="Mínimo para igualar"></b>')+'</div>';
+  h+='<p class="small muted">'+(need==null?'Nadie ha apostado: pasar es gratis.':'Igualar cuesta '+t.toCall+' para ganar un bote de '+(pot+t.toCall)+'. Necesitas al menos '+need+' % (marca blanca).')+'</p>';
+  return h;
+}
+function paintHint(){const el=$('#hintBody');if(el)el.innerHTML=hintBodyHTML();}
+function scheduleHelp(){
+  if(!G.help||!(G.waiting&&G.turn===0)||G.eq!=null||G.eqPending)return;
+  G.eqPending=true;
+  setTimeout(()=>{
+    if(!(G.waiting&&G.turn===0)){G.eqPending=false;return;}
+    const me=G.players[0];
+    const opps=G.players.filter(q=>q!==me&&!q.folded).length;
+    G.eq=equity(me.hole,G.board,opps,500);
+    G.eqPending=false;
+    paintHint();
+  },60);
+}
+function toolsHTML(){
+  const on=NET.on||NET.room;
+  const t=(act,ic,lb,cls,extra,aria)=>'<button class="tool'+(cls?' '+cls:'')+'" data-act="'+act+'"'+(aria?' aria-label="'+aria+'"':'')+'><i>'+ic+'</i><span>'+lb+'</span>'+(extra||'')+'</button>';
+  return t('profile','👤','Perfil')
+    +t('chat','💬','Chat','',CHAT.unread?'<b class="dot">'+CHAT.unread+'</b>':'')
+    +(on?t('mp','🌐','En línea','live'):'')
+    +t('snd',SND.on?'🔊':'🔇',SND.on?'Sonido':'Mudo','',null,SND.on?'Silenciar sonido':'Activar sonido')
+    +t('ranks','🃏','Manos')
+    +t('tab-guide','📖','Guía')+t('menu','🏠','Inicio','only-land');
+}
+function render(){
+  const P=G.players;
+  if(G.handNo!==LASTHAND){ANIM.clear();LASTTOT={};LASTRES=0;LASTHAND=G.handNo;}
+  let h='<div class="bar"><div class="meta">Mano '+G.handNo+' · Ciegas '+SB+'/'+BB+'</div><div class="tools">'+toolsHTML()+'</div></div>';
+  h+='<div class="arena"><div class="table"></div>'+midHTML()+seatHTML(P[1],'s-left',-90)+seatHTML(P[2],'s-top',0)+seatHTML(P[3],'s-right',90)+meHTML()+'</div>';
+  h+=actionsHTML();
+  h+='<section class="hint"><div class="hh"><span class="hl">Ayuda de juego</span><label class="sw"><input type="checkbox" id="helpT"'+(G.help?' checked':'')+'><span>Activada</span></label></div><div id="hintBody">'+hintBodyHTML()+'</div></section>';
+  h+='<section class="log"><h3>Historial</h3><ul>'+G.log.slice(0,30).map(m=>'<li class="'+logCls(m)+'">'+esc(m)+'</li>').join('')+'</ul></section>';
+  playEl.innerHTML=h;
+  NEWK.forEach(k=>ANIM.add(k));NEWK=[];
+  LASTPOT=potTotal();
+  flyChips();
+  clearTimeout(freshTimer);
+  freshTimer=setTimeout(()=>{G.fresh.clear();},500);
+  const ov=$('#sheetOver');
+  ov.hidden=!G.over;
+  if(G.over){
+    $('#overTitle').textContent=G.over.win?'¡Ganaste la mesa!':'Te quedaste sin fichas';
+    $('#overText').textContent=(G.over.win?'Eliminaste a todos los rivales en '+G.handNo+' manos.':'Jugaste '+G.handNo+' manos. Puedes empezar otra partida cuando quieras.')+(G.over.crownMe?' 👑 Llevarás la corona en la próxima partida.':(G.over.crown?' 👑 '+G.over.crown+' lleva la corona en la próxima partida.':''));
+  }
+  scheduleHelp();
+}
+
+/* Perfil */
+let pendingPhoto;
+let pendingMc={on:false,head:'',user:''};
+function loadProfile(){
+  try{
+    const r=localStorage.getItem('poker.profile');
+    if(!r)return;
+    const o=JSON.parse(r);
+    G.profile.name=String(o.name||'Tú').slice(0,14);
+    G.profile.photo=(typeof o.photo==='string'&&o.photo.indexOf('data:image/')===0)?o.photo:'';
+    G.profile.chips=Math.max(200,Math.min(1000,+o.chips||1000));
+    const m=o.mc||{};
+    G.profile.mc={on:!!m.on,head:(typeof m.head==='string'&&m.head.indexOf('data:image/png')===0)?m.head:'',user:String(m.user||'').replace(/[^A-Za-z0-9_]/g,'').slice(0,16)};
+  }catch(e){}
+}
+function effPhoto(){const m=G.profile.mc;return m&&m.on&&m.head?m.head:(G.profile.photo||'');}
+function saveProfile(){try{localStorage.setItem('poker.profile',JSON.stringify(G.profile));}catch(e){}}
+function paintPreview(){
+  const name=($('#profName').value.trim()||'Tú');
+  const base=pendingPhoto!==undefined?pendingPhoto:G.profile.photo;
+  const photo=pendingMc.on&&pendingMc.head?pendingMc.head:base;
+  const el=$('#profPrev');
+  el.style.background=photo?'#000':'#3a2416';
+  el.innerHTML=avatarInner({photo:photo,name:name});
+}
+function mcSync(msg){
+  $('#mcOn').checked=pendingMc.on;
+  $('#mcBox').hidden=!pendingMc.on;
+  $('#mcUser').value=pendingMc.user;
+  $('#mcMsg').textContent=msg!==undefined?msg:(pendingMc.on?(pendingMc.head?'Skin lista. Se usará como tu avatar al guardar.':'Importa una skin para usarla como avatar.'):'');
+}
+function skinToHead(img){
+  const k=img.width/64,c=document.createElement('canvas');
+  c.width=c.height=72;
+  const x=c.getContext('2d');x.imageSmoothingEnabled=false;
+  x.drawImage(img,8*k,8*k,8*k,8*k,0,0,72,72);
+  x.drawImage(img,40*k,8*k,8*k,8*k,0,0,72,72);
+  return c.toDataURL('image/png');
+}
+function skinOk(img){return img.width>=64&&img.width%64===0&&(img.height===img.width||img.height===img.width/2);}
+function setSkin(img,user){
+  if(!skinOk(img)){mcSync('Ese archivo no parece una skin de Minecraft (debe ser un PNG de 64×64 o 64×32).');return;}
+  pendingMc.head=skinToHead(img);pendingMc.on=true;if(user!==undefined)pendingMc.user=user;
+  mcSync('Skin importada.');paintPreview();
+}
+function processSkin(file){
+  if(!file||file.type!=='image/png'){mcSync('Elige un archivo PNG.');return;}
+  const fr=new FileReader();
+  fr.onload=()=>{const img=new Image();img.onload=()=>setSkin(img);img.onerror=()=>mcSync('No se pudo leer el archivo.');img.src=fr.result;};
+  fr.readAsDataURL(file);
+}
+function importSkinUser(){
+  const u=$('#mcUser').value.trim();
+  if(!/^[A-Za-z0-9_]{3,16}$/.test(u)){mcSync('Escribe un usuario válido (3 a 16 letras, números o _).');return;}
+  mcSync('Buscando skin…');
+  const urls=['https://minotar.net/skin/'+u,'https://mc-heads.net/skin/'+u];
+  let i=0;
+  const next=()=>{
+    if(i>=urls.length){mcSync('No se pudo importar ese usuario. Revisa el nombre y tu conexión, o sube el archivo de la skin.');return;}
+    const img=new Image();img.crossOrigin='anonymous';
+    img.onload=()=>{try{setSkin(img,u);}catch(e){next();}};
+    img.onerror=next;img.src=urls[i++];
+  };
+  next();
+}
+function openProfile(){
+  pendingPhoto=undefined;
+  pendingMc=Object.assign({on:false,head:'',user:''},G.profile.mc);
+  mcSync();
+  $('#profName').value=G.profile.name;
+  $('#profChips').value=G.profile.chips;
+  paintPreview();
+  $('#sheetProfile').hidden=false;
+}
+function commitProfile(){
+  G.profile.name=($('#profName').value.trim()||'Tú').slice(0,14);
+  if(pendingPhoto!==undefined)G.profile.photo=pendingPhoto;
+  G.profile.mc={on:!!(pendingMc.on&&pendingMc.head),head:pendingMc.head,user:pendingMc.user};
+  G.profile.chips=Math.max(200,Math.min(1000,Math.round((+$('#profChips').value||1000)/100)*100));
+  saveProfile();
+  if(G.players[0]){G.players[0].name=G.profile.name;G.players[0].photo=effPhoto();}
+  if(D.seats[0]&&NET.role!=='guest'){D.seats[0].name=G.profile.name;D.seats[0].photo=effPhoto();}
+  $('#sheetProfile').hidden=true;
+}
+function processPhoto(file){
+  if(!file||!/^image\//.test(file.type))return;
+  const fr=new FileReader();
+  fr.onload=()=>{
+    const img=new Image();
+    img.onload=()=>{
+      const s=Math.min(img.width,img.height),c=document.createElement('canvas');
+      c.width=c.height=128;
+      c.getContext('2d').drawImage(img,(img.width-s)/2,(img.height-s)/2,s,s,0,0,128,128);
+      pendingPhoto=c.toDataURL('image/jpeg',.82);
+      paintPreview();
+    };
+    img.src=fr.result;
+  };
+  fr.readAsDataURL(file);
+}
+
+/* Interacción */
+function setRaise(v,fromSlider){
+  const t=G.ui;
+  v=Math.max(t.minTo,Math.min(t.maxTo,v));
+  t.raiseTo=v;
+  const b=$('#bRaise');if(b)b.innerHTML=raiseInner();
+  const sl=$('#sl');if(sl&&!fromSlider)sl.value=sliderIdx(v);
+}
+function humanTurn(){return G.waiting&&G.turn===0&&G.turnActive&&!G.result;}
+function showTab(name){
+  const g1=name==='guide',g2=name==='guideDom',guide=g1||g2;
+  playEl.hidden=guide;
+  $('#guide').hidden=!g1;
+  $('#guideDom').hidden=!g2;
+  $('#tabPlay').setAttribute('aria-selected',String(!guide));
+  $('#tabGuide').setAttribute('aria-selected',String(guide));
+  window.scrollTo(0,0);$('#guide').scrollTop=0;$('#guideDom').scrollTop=0;
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]');
+  if(!b||b.disabled)return;
+  const a=b.dataset.act;
+  if(a==='fold'){if(humanTurn())act(0,'fold');}
+  else if(a==='call'){if(humanTurn())act(0,'call');}
+  else if(a==='raise'){if(humanTurn())act(0,'raise',G.ui.raiseTo);}
+  else if(a==='q'){
+    if(!humanTurn())return;
+    const t=G.ui,v=b.dataset.v;
+    if(v==='min')setRaise(t.minTo);
+    else if(v==='max')setRaise(t.maxTo);
+    else setRaise(Math.round((G.currentBet+parseFloat(v)*(potTotal()+t.toCall))/10)*10);
+  }
+  else if(a==='next'){startHand();}
+  else if(a==='newgame'){if(CUR==='domino')dNewMatch(false);else newGame();}
+  else if(a==='mp'){NET.open();}
+  else if(a==='snd'){SND.on=!SND.on;try{localStorage.setItem('poker.snd',SND.on?'1':'0');}catch(e){}if(SND.on)sfx('call');render();}
+  else if(a==='chat'){CHAT.open();}
+  else if(a==='inst'){openInst();}
+  else if(a==='ranks'){$('#sheetRank').hidden=false;}
+  else if(a==='close'){$('#sheetRank').hidden=true;}
+  else if(a==='profile'){openProfile();}
+  else if(a==='close-profile'){$('#sheetProfile').hidden=true;}
+  else if(a==='themes'){$('#sheetThemes').hidden=false;}
+  else if(a==='chipmenu'){$('#sheetChips').hidden=false;}
+  else if(a==='close-sheet'){$('#sheetThemes').hidden=true;$('#sheetChips').hidden=true;}
+  else if(a==='save-profile'){commitProfile();if(MENU.hasGame)render();}
+  else if(a==='newgame-profile'){commitProfile();if(CUR==='domino')dNewMatch(false);else newGame();}
+  else if(a==='photo-clear'){pendingPhoto='';paintPreview();}
+  else if(a==='mc-import'){importSkinUser();}
+  else if(a==='tab-play'){if(MENU.hasGame&&!(CUR==='domino'?D.hold:G.hold))showTab('play');else MENU.show('home');}
+  else if(a==='menu'){MENU.show('home');}
+  else if(a==='tab-guide'){showTab(CUR==='domino'?'guideDom':'guide');}
+  else if(a==='goto'){const el=document.getElementById(b.dataset.v);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+});
+document.addEventListener('input',e=>{
+  if(e.target.id==='sl'&&humanTurn()){
+    const t=G.ui,N=Math.ceil((t.maxTo-t.minTo)/10),i=+e.target.value;
+    setRaise(i>=N?t.maxTo:t.minTo+i*10,true);
+  }
+  if(e.target.id==='profName')paintPreview();
+});
+document.addEventListener('change',e=>{
+  if(e.target.id==='helpT'){G.help=e.target.checked;G.eq=null;G.eqPending=false;paintHint();scheduleHelp();}
+  if(e.target.id==='profFile'&&e.target.files&&e.target.files[0]){processPhoto(e.target.files[0]);e.target.value='';}
+  if(e.target.id==='mcFile'&&e.target.files&&e.target.files[0]){processSkin(e.target.files[0]);e.target.value='';}
+  if(e.target.id==='mcOn'){pendingMc.on=e.target.checked;mcSync();paintPreview();}
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){$('#sheetRank').hidden=true;$('#sheetProfile').hidden=true;$('#sheetThemes').hidden=true;$('#sheetChips').hidden=true;}
+});
+['sheetThemes','sheetChips'].forEach(id=>$('#'+id).addEventListener('click',e=>{if(e.target.id===id)e.target.hidden=true;}));
+$('#sheetRank').addEventListener('click',e=>{if(e.target.id==='sheetRank')e.target.hidden=true;});
+$('#sheetProfile').addEventListener('click',e=>{if(e.target.id==='sheetProfile')e.target.hidden=true;});
+
+/*==SONIDO==*/
+const SND={on:true,ctx:null};
+try{SND.on=localStorage.getItem('poker.snd')!=='0';}catch(e){}
+function actx(){
+  if(!SND.ctx){try{SND.ctx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){return null;}}
+  if(SND.ctx.state==='suspended'){try{SND.ctx.resume();}catch(e){}}
+  return SND.ctx;
+}
+addEventListener('pointerdown',()=>{if(SND.on)actx();},{once:true});
+function clack(t,f,v){
+  const c=SND.ctx,n=Math.floor(c.sampleRate*.06),b=c.createBuffer(1,n,c.sampleRate),d=b.getChannelData(0);
+  for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,5);
+  const sr=c.createBufferSource();sr.buffer=b;
+  const bp=c.createBiquadFilter();bp.type='bandpass';bp.frequency.value=f;bp.Q.value=2.5;
+  const g=c.createGain();g.gain.value=v;sr.connect(bp);bp.connect(g);g.connect(c.destination);sr.start(t);
+  const o=c.createOscillator(),og=c.createGain();o.type='sine';o.frequency.setValueAtTime(f*.6,t);
+  og.gain.setValueAtTime(v*.25,t);og.gain.exponentialRampToValueAtTime(.0001,t+.07);
+  o.connect(og);og.connect(c.destination);o.start(t);o.stop(t+.08);
+}
+function chime(t,f1,f2,v){
+  const c=SND.ctx,o=c.createOscillator(),g=c.createGain();o.type='triangle';
+  o.frequency.setValueAtTime(f1,t);o.frequency.exponentialRampToValueAtTime(f2,t+.22);
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v,t+.04);g.gain.exponentialRampToValueAtTime(.0001,t+.3);
+  o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+.32);
+}
+function sfx(kind){
+  if(!SND.on||!kind)return;
+  try{
+    const c=actx();if(!c)return;const t=c.currentTime+.01;
+    if(kind==='check'){clack(t,700,1);clack(t+.12,620,.9);}
+    else if(kind==='call'){clack(t,2600,.9);clack(t+.08,3100,.7);}
+    else if(kind==='raise'){for(let i=0;i<5;i++)clack(t+i*.055,2400+i*260,.8);chime(t+.28,520,880,.12);}
+    else if(kind==='allin'){for(let i=0;i<9;i++)clack(t+i*.045,2200+(i%4)*330,.85);chime(t+.4,330,660,.16);chime(t+.55,440,990,.12);}
+  }catch(e){}
+}
+
+/*==CHAT y comandos==*/
+const CHAT={msgs:[],unread:0,
+  add(n,x,mine){
+    this.msgs.push({n:n,x:x,me:!!mine});if(this.msgs.length>100)this.msgs.shift();
+    if($('#sheetChat').hidden){if(!mine){this.unread++;render();}}else this.paint();
+  },
+  paint(){
+    const l=$('#chatList');
+    l.innerHTML=this.msgs.length?this.msgs.map(m=>'<li class="'+(m.me?'me':'')+'"><b>'+esc(m.n)+':</b> '+esc(m.x)+'</li>').join(''):'<li class="empty">Aún no hay mensajes.</li>';
+    l.scrollTop=l.scrollHeight;
+  },
+  open(){$('#sheetChat').hidden=false;const u=this.unread;this.unread=0;this.paint();if(u)render();setTimeout(()=>{try{$('#chatIn').focus();}catch(e){}},50);},
+  close(){$('#sheetChat').hidden=true;},
+  send(){
+    const inp=$('#chatIn'),t=inp.value.trim();if(!t)return;
+    inp.value='';
+    if(t.charAt(0)==='/'){
+      if(secretCmd(t)){inp.style.borderColor='#4caf7a';setTimeout(()=>{inp.style.borderColor='';},450);}
+      return;
+    }
+    if(NET.role==='guest'){NET.send({t:'chat',x:t});return;}
+    const n=(G.profile.name||'Tú').slice(0,14);
+    this.add(n,t,true);NET.cast(n,t,-1);
+  }
+};
+function secretCmd(t){
+  if(NET.role==='guest')return false;
+  const m=/^\/\s*(1[0-4]|[1-9]|[ajqk])\s*([♤♡◇♧])\uFE0E?\uFE0F?\s*$/i.exec(t);
+  if(!m)return false;
+  const L=m[1].toUpperCase();let r=({A:14,J:11,Q:12,K:13})[L]||+L;if(r===1)r=14;
+  const s='♤♡◇♧'.indexOf(m[2]);
+  if(s<0)return false;
+  if(!G.rig)G.rig=[];
+  if(G.rig.length<6)G.rig.push(r*4+s);
+  return true;
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-chat]');
+  if(b){if(b.dataset.chat==='send')CHAT.send();else CHAT.close();return;}
+  if(e.target.id==='sheetChat')CHAT.close();
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&e.target.id==='chatIn'){e.preventDefault();CHAT.send();}
+  if(e.key==='Escape')CHAT.close();
+});
+
+/*==NET: multijugador con sala de 4 letras (PeerJS, sin pegar códigos largos)==*/
+let CUR='poker';
+const _r=render;render=function(){if(CUR==='domino'){dRender();dBc();return;}_r();NET.bc();};
+const PEER_SRC=['https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js','https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js'];
+const PCFG={config:{iceServers:[{urls:['stun:stun.l.google.com:19302','stun:stun1.l.google.com:19302','stun:stun.cloudflare.com:3478']},{urls:['turn:openrelay.metered.ca:80','turn:openrelay.metered.ca:443','turn:openrelay.metered.ca:443?transport=tcp'],username:'openrelayproject',credential:'openrelayproject'}]}};
+function loadPeer(){
+  if(window.Peer)return Promise.resolve();
+  return new Promise((ok,no)=>{let i=0;const t=()=>{if(i>=PEER_SRC.length)return no(new Error('lib'));const sc=document.createElement('script');sc.src=PEER_SRC[i++];sc.onload=()=>window.Peer?ok():t();sc.onerror=()=>{sc.remove();t();};document.head.appendChild(sc);};t();});
+}
+function mini(src){
+  return new Promise(res=>{
+    if(!src||src.indexOf('data:image/')!==0)return res('');
+    const im=new Image();
+    im.onload=()=>{try{const c=document.createElement('canvas');c.width=c.height=72;c.getContext('2d').drawImage(im,0,0,72,72);res(c.toDataURL('image/jpeg',.7));}catch(e){res('');}};
+    im.onerror=()=>res('');im.src=src;
+  });
+}
+function snap(s,q){
+  const R=i=>i<0?-1:(i-s+4)%4,me=G.players[s],ps=[];
+  for(let k=0;k<4;k++){const g=(s+k)%4,p=G.players[g];
+    const ph=g===0?NET.hm:(p.photo||'');
+    ps.push({idx:k,crown:!!p.crown,empty:p.empty,name:p.name,photo:(q&&q.sent[k]===ph)?undefined:ph,color:p.color,chips:p.chips,bet:p.bet,total:p.total,folded:p.folded,allIn:p.allIn,out:p.out,locked:p.locked,last:p.last,handName:p.handName,revealed:p.revealed,won:p.won,human:k===0,
+      hole:p.hole.map((c,j)=>k===0||p.revealed?c:{r:2,s:0,id:-1-j-2*k}),best:p.revealed&&p.best?{score:p.best.score}:null});
+    if(q)q.sent[k]=ph;}
+  const r=G.result;
+  return{sb:SB,bb:BB,players:ps,dealer:R(G.dealer),sbIdx:R(G.sbIdx),bbIdx:R(G.bbIdx),phase:G.phase,board:G.board,currentBet:G.currentBet,minRaise:G.minRaise,turn:R(G.turn),turnActive:G.turnActive,handNo:G.handNo,log:G.log.slice(0,30),fresh:[...G.fresh],lit:[...G.lit],
+    result:r?{headline:me.won>0?'¡Ganas la mano!':(me.folded?'Mano terminada':'Pierdes la mano'),detail:r.detail,uncontested:r.uncontested}:null,over:G.over?{win:me.chips>0,crown:G.over.crown,crownMe:G.over.ci===s}:null};
+}
+function apply(o){
+  CUR='poker';NET.game='poker';
+  if(o.sb){SB=o.sb;BB=o.bb;}
+  const pw=G.waiting,po=G.ui&&G.ui.raiseTo,oldLast=G.players.map(p=>p.last);
+  o.players.forEach((p,k)=>{if(p.photo===undefined)p.photo=(G.players[k]&&G.players[k].photo)||'';});
+  Object.assign(G,o,{fresh:new Set(o.fresh),lit:new Set(o.lit)});
+  o.players.forEach((p,k)=>{if(k>0&&p.last!==oldLast[k]){const a=actKind(p.last);if(a==='call')sfx('call');else if(a==='check')sfx('check');else if(a==='raise')sfx('raise');else if(a==='allin')sfx('allin');}});
+  G.waiting=!!(o.turnActive&&o.turn===0&&!o.result);
+  if(G.waiting){const t=turnInfo(G.players[0]);G.ui=Object.assign({},t,{raiseTo:pw&&po>=t.minTo&&po<=t.maxTo?po:t.minTo});G.eq=null;G.eqPending=false;}
+  _r();
+}
+const NET={on:false,room:false,role:'',mode:'',code:'',peers:{},peer:null,ch:null,busy:'',err:'',hm:'',_hs:null,nb:null,game:'poker',
+  r(){_r();},
+  send(m){try{if(this.ch&&this.ch.open)this.ch.send(m);}catch(e){}},
+  fill(){const np=Object.keys(this.peers).length;let n=Math.max(0,Math.min(G.botN,3-np));for(let i=1;i<4;i++){const p=G.players[i];if(p.rem)continue;if(n>0)n--;else{p.empty=true;p.chips=0;p.out=true;p.folded=true;}}},
+  seat(){for(const i in this.peers){const p=G.players[i],q=this.peers[i];if(p&&q.ch&&q.ch.open){p.rem=true;p.name=q.name;p.photo=q.photo;p.key='n:'+String(q.name).toLowerCase();}}},
+  bc(){
+    if(this.role!=='host')return;
+    const ph=G.players[0]?G.players[0].photo||'':'';
+    if(this._hs!==ph){this._hs=ph;mini(ph).then(x=>{this.hm=x;this.bc();});}
+    for(const i in this.peers){const q=this.peers[i];try{if(q.ch.open)q.ch.send({t:'s',d:snap(+i,q)});}catch(e){}}
+  },
+  cast(n,x,from){for(const i in this.peers){const q=this.peers[i];try{if(q.ch.open)q.ch.send({t:'c',n:n,x:x,me:+i===from});}catch(e){}}},
+  link(){const base=/^https?:/.test(location.protocol)?location.origin+location.pathname:location.href.split('#')[0];return base+'#sala='+this.code;},
+  open(){if(!this.mode&&this.role)this.mode=this.role;MENU.show('mp');},
+  roomHTML(){
+    let h='<p style="margin:16px 0 8px;font-weight:600">Ajustes de la mesa</p>';
+    if(this.game==='domino'){
+      h+='<div class="pf"><label>Puntos para ganar</label><div class="pair">'+DTARGETS.map(v=>'<button class="mini" data-mp="target" data-v="'+v+'" aria-pressed="'+(D.tp===v)+'">'+v+'</button>').join('')+'</div></div>';
+      return h;
+    }
+    h+='<div class="pf"><label for="roomChips">Dinero por jugador</label><input type="number" id="roomChips" min="200" max="10000" step="50" inputmode="numeric" value="'+ROOM.chips+'"></div>';
+    h+='<div class="pf"><label>Ciegas (pequeña / grande)</label><div class="pair">'+BLINDS.map((b,i)=>'<button class="mini" data-mp="blind" data-v="'+i+'" aria-pressed="'+(ROOM.blind===i)+'">'+b[0]+'/'+b[1]+'</button>').join('')+'</div></div>';
+    if(!G.hold)h+='<p class="note">Los ajustes nuevos se aplican al empezar una partida nueva.</p>';
+    return h;
+  },
+  bots(d){const np=Object.keys(this.peers).length,dm=this.game==='domino';if(this.nb==null)this.nb=dm?D.botN:G.botN;this.nb=Math.max(0,Math.min(3-np,this.nb+d));if(dm){if(D.hold){D.botN=this.nb;dSave();dNewMatch(true);}}else if(G.hold){G.botN=this.nb;saveCfg();newGame(true);}this.paint();},
+  listHTML(){
+    if(this.game==='domino'){
+      let r='';
+      D.seats.forEach(p=>{
+        if(p.empty)return;
+        const tag=p.i===D.me?(this.role==='guest'?'tú':'anfitrión'):(this.role==='guest'?'':(p.gone?'salió':(p.rem?'jugador':'bot')));
+        r+='<li style="display:flex;align-items:center;gap:10px;padding:5px 0"><span class="avatar" style="width:34px;height:34px;font-size:15px;flex:none;background:'+(p.photo?'#000':p.color)+'">'+avatarInner(p)+'</span><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis">'+esc(p.name)+'</span><small class="note">'+tag+'</small></li>';
+      });
+      return r?'<ul style="list-style:none;margin:8px 0;padding:0">'+r+'</ul>':'';
+    }
+    const row=(p,tag)=>'<li style="display:flex;align-items:center;gap:10px;padding:5px 0"><span class="avatar" style="width:34px;height:34px;font-size:15px;flex:none;background:'+(p.photo?'#000':p.color)+'">'+avatarInner(p)+'</span><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis">'+(p.crown?'👑 ':'')+esc(p.name)+'</span><small class="note">'+tag+'</small></li>';
+    let r='';
+    G.players.forEach((p,i)=>{
+      if(p.empty)return;
+      let tag;
+      if(i===0)tag=this.role==='guest'?'tú':'anfitrión';
+      else if(this.role==='guest')tag='';
+      else tag=p.gone?'salió':(p.rem?'jugador':'bot');
+      r+=row(p,tag);
+    });
+    return r?'<ul style="list-style:none;margin:8px 0;padding:0">'+r+'</ul>':'';
+  },
+  paint(){
+    const e=$('#mpBody');if(!e)return;let h='';const m=this.mode,np=Object.keys(this.peers).length;
+    const err=this.err?'<p class="note" style="color:#ffb4a6">'+esc(this.err)+'</p>':'';
+    const busy=this.busy?'<p class="note">'+esc(this.busy)+'</p>':'';
+    let back='';
+    if(this.role==='guest'){
+      h='<p>Conectado a la mesa.</p>'+this.listHTML()+(this.game==='domino'?'<p class="note">Gana quien llegue a '+D.target+' puntos</p>':'<p class="note">Ciegas '+SB+'/'+BB+'</p>')+'<div class="row"><button class="mini" data-mp="leave">Salir de la mesa</button></div>';
+    }else if(m==='join'){
+      back='<div class="row" style="justify-content:flex-start;margin:0 0 8px"><button class="mini" data-mp="back">← Atrás</button></div>';
+      h='<p class="note">Escribe el código de 4 letras que te dio el anfitrión.</p><input id="mpIn" maxlength="4" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABCD" style="width:100%;text-align:center;font:700 40px/1.2 var(--f-display);letter-spacing:.2em;text-transform:uppercase;background:#0a1a16;color:var(--text);border:1px solid var(--line);border-radius:12px;padding:8px;margin:8px 0">'+err+busy+'<div class="row sp"><button class="btn raise" data-mp="go"'+(this.busy?' disabled':'')+'>Unirme</button></div>';
+    }else if(m==='host'){
+      if(this.room){
+        h='<p class="note">Comparte el enlace o este código. Quien lo abra entra directo a tu mesa.</p><div style="font:700 46px/1 var(--f-display);letter-spacing:.2em;text-align:center;margin:12px 0 4px;padding-left:.2em">'+esc(this.code)+'</div><div class="row sp"><button class="btn raise" data-mp="share">Compartir enlace</button><button class="mini" data-mp="copy">Copiar código</button></div>'+this.listHTML();
+      }else{
+        back='<div class="row" style="justify-content:flex-start;margin:0 0 8px"><button class="mini" data-mp="back">← Atrás</button></div>';
+        h=busy+err;
+      }
+    }else if(m==='pick'){
+      back='<div class="row" style="justify-content:flex-start;margin:0 0 8px"><button class="mini" data-mp="back">← Atrás</button></div>';
+      h='<p class="note">Elige el juego de tu mesa. Quienes se unan juegan el mismo.</p><div class="gpick"><button class="mbtn gold" data-mp="host-poker"><span class="mt">Póker</span><span class="ms">Texas Hold\'em con ciegas</span></button><button class="mbtn felt" data-mp="host-domino"><span class="mt">Dominó</span><span class="ms">Doble seis, tú eliges los puntos</span></button></div>';
+    }else{
+      h='<p class="note">Crea una mesa y comparte el enlace o un código de 4 letras: tus amigos solo lo abren y entran. Hasta 4 jugadores y hace falta internet.</p>'+err+'<div class="row sp"><button class="btn call" data-mp="host">Crear mesa</button><button class="btn raise" data-mp="join">Unirme</button></div>';
+    }
+    if(this.role==='host'&&this.room&&m!=='join'){
+      const mx=3-np;
+      const dm=this.game==='domino',HOLD=dm?D.hold:G.hold;
+      if(this.nb==null)this.nb=dm?D.botN:G.botN;this.nb=Math.max(0,Math.min(mx,this.nb));
+      h+=this.roomHTML();
+      h+='<p style="margin:16px 0 0">Bots en la mesa</p><div class="row sp" style="align-items:center;justify-content:center"><button class="mini" data-mp="bm" aria-label="Menos bots">−</button><b style="min-width:70px;text-align:center">'+this.nb+(this.nb===1?' bot':' bots')+'</b><button class="mini" data-mp="bp" aria-label="Más bots">+</button></div>';
+      if(HOLD)h+='<div class="row sp"><button class="btn raise" data-mp="start">Empezar partida</button></div><p class="note">Empieza cuando quieras. Si la mesa se llena, quien entre ocupa el lugar de un bot.</p>';
+      else h+='<div class="row sp"><button class="btn raise" data-mp="resume">Volver a la mesa</button></div><div class="row sp"><button class="mini" data-mp="apply">Aplicar ajustes y nueva partida</button></div>';
+      h+='<div class="row"><button class="mini" data-mp="leave">Cerrar sala</button></div>';
+    }
+    e.innerHTML=back+h;
+    const inp=$('#mpIn');if(inp&&m==='join'&&!this.busy&&document.activeElement!==inp&&!inp.value)setTimeout(()=>{try{inp.focus();}catch(x){}},50);
+  },
+  back(){
+    if(this.mode==='host'&&!this.room){this.role='';}
+    this.mode='';this.err='';this.busy='';this.nb=null;this.paint();
+  },
+  async host(){
+    this.err='';this.busy='Creando sala…';this.mode='host';this.paint();
+    try{await loadPeer();}catch(x){this.busy='';this.err='No se pudo cargar el servicio de salas. Revisa tu conexión a internet.';this.paint();return;}
+    const A='ABCDEFGHJKLMNPQRSTUVWXYZ';
+    const go=n=>{
+      const code=Array.from({length:4},()=>A[Math.random()*A.length|0]).join('');
+      const pr=new Peer('pkrtx-'+code,PCFG);
+      pr.on('open',()=>{this.peer=pr;this.code=code;this.room=true;this.role='host';this.busy='';this.err='';this.paint();render();});
+      pr.on('connection',c=>this.incoming(c));
+      pr.on('disconnected',()=>{try{if(!pr.destroyed)pr.reconnect();}catch(x){}});
+      pr.on('error',er=>{
+        if(er&&er.type==='unavailable-id'&&n<6){try{pr.destroy();}catch(x){}go(n+1);return;}
+        const ty=er&&er.type?' ('+er.type+')':'';if(!this.room){this.busy='';this.mode='host';this.err='No se pudo crear la sala'+ty+'. Revisa tu conexión a internet e inténtalo de nuevo.';this.paint();}else{this.err='Problema con el servidor de salas'+ty+'. Si tus amigos no pueden entrar, cierra la sala y crea otra.';this.paint();}
+      });
+    };
+    go(0);
+  },
+  incoming(c){
+    const fr=[1,2,3].filter(i=>!this.peers[i]);
+    const s=fr.find(i=>this.game==='domino'?(D.seats[i]&&D.seats[i].empty):(G.players[i]&&G.players[i].empty))||fr[0];
+    if(s==null){c.on('open',()=>{try{c.send({t:'full'});}catch(x){}setTimeout(()=>{try{c.close();}catch(x){}},500);});return;}
+    this.peers[s]={ch:c,name:String((c.metadata&&c.metadata.name)||'Jugador').slice(0,14),photo:'',sent:{}};
+    c.on('open',()=>this.up(s,c));
+    c.on('data',d=>this.msg(s,d));
+    c.on('close',()=>this.drop(s,c));
+    c.on('error',()=>this.drop(s,c));
+    setTimeout(()=>{const q=this.peers[s];if(q&&q.ch===c&&!c.open)delete this.peers[s];},15000);
+  },
+  up(s,c){
+    const q=this.peers[s];if(!q||q.ch!==c)return;
+    if(this.game==='domino'){dUp(s,c);return;}
+    this.on=true;this.role='host';
+    const p=G.players[s];p.rem=true;p.human=false;p.gone=false;p.name=q.name;p.photo='';p.key='n:'+String(q.name).toLowerCase();p.crown=!!G.crownKey&&p.key===G.crownKey;
+    if(p.empty||p.chips<=0){p.empty=false;p.out=false;p.chips=START;p.folded=true;p.hole=[];p.bet=0;p.total=0;p.allIn=false;p.acted=false;p.last=G.lobby?'':'Entra en la siguiente mano';}
+    else if(G.turnActive&&G.turn===s&&!G.result)clearTimeout(G.timer);
+    log(q.name+' se unió a la mesa');
+    if(G.lobby&&!G.hold){G.lobby=false;clearTimeout(G.timer);G.timer=setTimeout(startHand,1600);}
+    render();this.paint();
+  },
+  drop(s,c){
+    const q=this.peers[s];if(!q||q.ch!==c)return;
+    delete this.peers[s];if(this.game==='domino'){this.on=Object.keys(this.peers).length>0;dDrop(s);return;}const p=G.players[s];
+    if(p&&p.rem){p.rem=false;p.gone=true;log(p.name+' salió de la mesa');if(G.turnActive&&G.turn===s&&!G.result)G.timer=setTimeout(()=>botAct(s),600);}
+    this.on=Object.keys(this.peers).length>0;
+    render();this.paint();
+  },
+  msg(s,d){
+    let m=d;if(typeof d==='string'){try{m=JSON.parse(d);}catch(x){return;}}
+    if(!m||typeof m!=='object')return;
+    if(this.game==='domino'){dMsg(s,m);return;}
+    const p=G.players[s],q=this.peers[s];if(!p||!q)return;
+    if(m.t==='hi'){
+      q.name=String(m.name||'Jugador').slice(0,14);
+      q.photo=(typeof m.photo==='string'&&m.photo.indexOf('data:image/')===0&&m.photo.length<20000)?m.photo:'';
+      p.name=q.name;p.photo=q.photo;p.key='n:'+String(q.name).toLowerCase();p.crown=!!G.crownKey&&p.key===G.crownKey;render();this.paint();
+    }else if(m.t==='chat'&&typeof m.x==='string'){
+      const x=m.x.slice(0,200);if(!x.trim()||x.charAt(0)==='/')return;
+      CHAT.add(q.name,x,false);this.cast(q.name,x,s);
+    }else if(m.t==='act'&&['fold','call','raise'].indexOf(m.type)>=0&&G.turnActive&&G.turn===s&&!G.result)act(s,m.type,+m.raiseTo||0);
+  },
+  async join(code){
+    code=String(code||'').toUpperCase().replace(/[^A-Z]/g,'').slice(0,4);
+    if(code.length!==4){this.err='Escribe el código de 4 letras.';this.paint();return;}
+    this.err='';this.busy='Conectando…';this.mode='join';this.paint();
+    try{await loadPeer();}catch(x){this.busy='';this.err='No se pudo cargar el servicio de salas. Revisa tu conexión a internet.';this.paint();return;}
+    try{if(this.peer)this.peer.destroy();}catch(x){}
+    const pr=new Peer(PCFG);this.peer=pr;let done=false;
+    const fail=t=>{if(done)return;done=true;clearTimeout(to);this.busy='';this.err=t;try{pr.destroy();}catch(x){}if(this.peer===pr)this.peer=null;this.paint();};
+    const to=setTimeout(()=>fail('No se pudo conectar. Revisa el código y que el anfitrión tenga la mesa abierta.'),25000);
+    pr.on('error',er=>fail(er&&er.type==='peer-unavailable'?'No existe esa mesa. Revisa el código.':'No se pudo conectar'+(er&&er.type?' ('+er.type+')':'')+'. Revisa tu conexión a internet.'));
+    pr.on('open',()=>{
+      const c=pr.connect('pkrtx-'+code,{reliable:true,serialization:'json',metadata:{name:G.profile.name}});
+      this.ch=c;
+      c.on('open',async()=>{
+        if(done)return;done=true;clearTimeout(to);
+        this.role='guest';this.on=true;this.busy='';this.err='';clearTimeout(G.timer);G.turnActive=false;G.over=null;G.lobby=false;
+        this.send({t:'hi',name:G.profile.name,photo:await mini(effPhoto())});
+        playEl.innerHTML='<p class="note" style="padding:40px 0;text-align:center">Entrando a la mesa…</p>';MENU.hasGame=true;MENU.hide();this.paint();
+      });
+      c.on('data',m=>{if(!m||typeof m!=='object')return;if(m.t==='s')apply(m.d);else if(m.t==='ds')dApply(m.d);else if(m.t==='c')CHAT.add(String(m.n||'').slice(0,14),String(m.x||'').slice(0,200),m.me);else if(m.t==='full')this.leave('La mesa está llena.');});
+      c.on('close',()=>{if(this.role==='guest')this.leave('El anfitrión cerró la mesa.');else fail('No se pudo conectar con el anfitrión. Prueba otra vez.');});
+      c.on('error',()=>fail('No se pudo conectar con el anfitrión.'));
+    });
+  },
+  leave(msg,quiet){
+    const was=this.role==='guest',wasHold=(this.game==='domino'?D.hold:G.hold);
+    const ps=this.peers;this.peers={};
+    for(const i in ps){try{ps[i].ch.close();}catch(x){}const p=(this.game==='domino'?D.seats:G.players)[i];if(p&&p.rem){p.rem=false;p.gone=true;}}
+    try{if(this.ch)this.ch.close();}catch(x){}
+    try{if(this.peer)this.peer.destroy();}catch(x){}
+    this.peer=null;this.ch=null;this.role='';this.on=false;this.room=false;this.mode='';this.code='';this.busy='';this.err=msg||'';this.nb=null;
+    G.hold=false;D.hold=false;
+    if(was||wasHold){G.over=null;G.lobby=false;D.over=null;D.lobby=false;MENU.hasGame=false;}else if(MENU.hasGame&&(CUR==='domino'?D.seats.length:G.players.length))render();
+    if(!quiet)MENU.show(msg?'mp':'home');
+    this.paint();
+  },
+  auto(){
+    const m=/^#sala=([A-Za-z]{4})$/.exec(location.hash);if(!m)return;
+    try{history.replaceState(null,'',location.pathname+location.search);}catch(x){}
+    this.mode='join';MENU.show('mp');this.join(m[1]);
+  }
+};
+document.addEventListener('click',async e=>{
+  const b=e.target.closest('[data-mp]');if(!b)return;const a=b.dataset.mp,N=NET;
+  try{
+    if(a==='close')MENU.show('home');
+    else if(a==='host'){N.mode='pick';N.err='';N.busy='';N.paint();}
+    else if(a==='host-poker'){N.game='poker';if(!(CUR==='poker'&&G.lobby&&MENU.hasGame&&!G.hold))newGame(true);await N.host();}
+    else if(a==='host-domino'){N.game='domino';if(!(CUR==='domino'&&D.lobby&&MENU.hasGame&&!D.hold))dNewMatch(true);await N.host();}
+    else if(a==='target'){D.tp=+b.dataset.v||100;D.target=D.tp;dSave();N.paint();if(CUR==='domino'&&MENU.hasGame)render();}
+    else if(a==='join'){N.mode='join';N.err='';N.busy='';N.paint();}
+    else if(a==='go')await N.join($('#mpIn').value);
+    else if(a==='back')N.back();
+    else if(a==='bm')N.bots(-1);
+    else if(a==='bp')N.bots(1);
+    else if(a==='apply'){if(N.game==='domino'){D.botN=N.nb;dSave();N.nb=null;dNewMatch(false);}else{G.botN=N.nb;saveCfg();N.nb=null;newGame();}}
+    else if(a==='blind')setRoom('blind',+b.dataset.v);
+    else if(a==='start'){if(N.game==='domino'){D.hold=false;D.lobby=false;N.nb=null;MENU.hide();dStartRound();}else{G.hold=false;G.lobby=false;N.nb=null;MENU.hide();startHand();}}
+    else if(a==='resume')MENU.resume();
+    else if(a==='leave')N.leave();
+    else if(a==='copy'){await navigator.clipboard.writeText(N.code);b.textContent='Copiado';}
+    else if(a==='share'){
+      const t='Únete a mi mesa de Board Games. Código: '+N.code;
+      if(navigator.share)await navigator.share({title:"Board Games",text:t,url:N.link()});
+      else{await navigator.clipboard.writeText(t+' '+N.link());b.textContent='Enlace copiado';}
+    }
+  }catch(err){}
+});
+document.addEventListener('change',e=>{if(e.target.id==='roomChips')setRoom('chips',e.target.value);});
+document.addEventListener('input',e=>{if(e.target.id==='mpIn'){const v=e.target.value.toUpperCase().replace(/[^A-Z]/g,'').slice(0,4);if(v!==e.target.value)e.target.value=v;}});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='mpIn')NET.join(e.target.value);});
+if('serviceWorker' in navigator&&/^https?:/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
+
+/*==TEMA y BOTS==*/
+const TH={bg:'#0a1a16',felt:'#14503f',chip:'#c8452f'},PRE={bg:['#0a1a16','#0d1424','#1a1014','#121212','#2a1d12'],felt:['#14503f','#1d3f7a','#7a1f2b','#4a2d6b','#2b2b2b'],chip:['#c8452f','#2d6bd1','#2f9e5b','#222222','#7a3fb0','#d6ad52']};
+/*==AJUSTES DE LA MESA (multijugador)==*/
+const BLINDS=[[10,20],[20,40],[50,100],[100,200]];
+const ROOM={chips:1000,blind:0};
+G.botN=3;
+try{const o=JSON.parse(localStorage.getItem('poker.cfg')||'{}'),H=/^#[0-9a-f]{6}$/i;if(H.test(o.bg))TH.bg=o.bg;if(H.test(o.felt))TH.felt=o.felt;if(H.test(o.chip))TH.chip=o.chip;if(o.bots>=0&&o.bots<=3)G.botN=o.bots|0;if(o.rc>=200&&o.rc<=10000)ROOM.chips=o.rc|0;if(o.rb>=0&&o.rb<BLINDS.length)ROOM.blind=o.rb|0;}catch(e){}
+function saveCfg(){try{localStorage.setItem('poker.cfg',JSON.stringify({bg:TH.bg,felt:TH.felt,chip:TH.chip,bots:G.botN,rc:ROOM.chips,rb:ROOM.blind}));}catch(e){}}
+function setRoom(k,v){
+  if(k==='chips')ROOM.chips=Math.max(200,Math.min(10000,Math.round((+v||1000)/10)*10));
+  else if(k==='blind')ROOM.blind=Math.max(0,Math.min(BLINDS.length-1,v|0));
+  saveCfg();
+  if(G.hold)newGame(true);
+  NET.paint();
+}
+function dk(h,f){const n=parseInt(h.slice(1),16);return '#'+[16,8,0].map(s=>Math.round(((n>>s)&255)*f).toString(16).padStart(2,'0')).join('');}
+function applyTheme(save){
+  const s=document.documentElement.style;
+  s.setProperty('--bg',TH.bg);s.setProperty('--felt',TH.felt);s.setProperty('--felt-deep',dk(TH.felt,.62));s.setProperty('--chipc',TH.chip);
+  const m=document.querySelector('meta[name=theme-color]');if(m)m.content=TH.bg;
+  ['bg','felt','chip'].forEach(k=>{
+    $('#sw_'+k).innerHTML=PRE[k].map(c=>'<button data-th="'+k+'" data-c="'+c+'" style="background:'+c+'" aria-label="'+c+'" aria-pressed="'+(TH[k]===c)+'"></button>').join('');
+    const i=document.querySelector('[data-thin='+k+']');if(i&&i.value!==TH[k])i.value=TH[k];
+  });
+  if(save)saveCfg();
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-th]');if(b){TH[b.dataset.th]=b.dataset.c;applyTheme(true);}});
+document.addEventListener('input',e=>{const k=e.target.dataset&&e.target.dataset.thin;if(k&&/^#[0-9a-f]{6}$/i.test(e.target.value)){TH[k]=e.target.value;applyTheme(true);}});
+applyTheme();
+
+/*==ICONO DE LA PESTAÑA==*/
+const IC={a:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAIAAADdvvtQAAAWfmNhQlgAABZ+anVtYgAAAB5qdW1kYzJwYQARABCAAACqADibcQNjMnBhAAAAFlhqdW1iAAAAR2p1bWRjMm1hABEAEIAAAKoAOJtxA3VybjpjMnBhOmQ0NWYyNzIyLTJkNTctNDM1Ny1iNjMxLWU3ZDE2MTI0MDQwOQAAAAOTanVtYgAAAClqdW1kYzJhcwARABCAAACqADibcQNjMnBhLmFzc2VydGlvbnMAAAAAuGp1bWIAAABEanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5pbmdyZWRpZW50LnYzAAAAABhjMnNopiPFmeERUpT7V84zXDmfowAAAGxjYm9yo2lkYzpmb3JtYXRpaW1hZ2UvcG5namluc3RhbmNlSUR4LHhtcDppaWQ6ZDM2Njc5MjgtMjNlZC00ZDAzLWIwMTctNDc1OTU2NzZjMDE3bHJlbGF0aW9uc2hpcGhwYXJlbnRPZgAAAeJqdW1iAAAAQWp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuYWN0aW9ucy52MgAAAAAYYzJzaH7L0lthgn96QhGrhqedVgcAAAGZY2JvcqJnYWN0aW9uc4KiZmFjdGlvbmtjMnBhLm9wZW5lZGpwYXJhbWV0ZXJzoWtpbmdyZWRpZW50c4GiY3VybHgtc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5pbmdyZWRpZW50LnYzZGhhc2hYIPexq9RpnHfmZ03+0Wb/DB+QhwAiBEcvlUJFzuv6E4VppGZhY3Rpb254HWNvbS5hbnRocm9waWMuY2xhdWRlLnByb3ZpZGVkanBhcmFtZXRlcnOheB9jb20uYW50aHJvcGljLm9yaWdpbi1jb25maWRlbmNlZ3Vua25vd25rZGVzY3JpcHRpb254ZkNsYXVkZSBwcm92aWRlZCB0aGlzIGZpbGUgYXQgdGhlIHJlcXVlc3Qgb2YgYSB1c2VyIGFuZCBtYXkgaGF2ZSBjcmVhdGVkIG9yIG1vZGlmaWVkIHRoZSBmaWxlIGNvbnRlbnRzLm1zb2Z0d2FyZUFnZW50oWRuYW1lZkNsYXVkZXJhbGxBY3Rpb25zSW5jbHVkZWT1AAAAyGp1bWIAAABAanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5oYXNoLmRhdGEAAAAAGGMyc2hnnAtqZgMoPF6ssrG/XGCyAAAAgGNib3KlY2FsZ2ZzaGEyNTZjcGFkTQAAAAAAAAAAAAAAAABkaGFzaFggSN5X5wPYPChAZ3zjJqgBNXeLfgBq0fW8dhdMXSfNR/9kbmFtZW5qdW1iZiBtYW5pZmVzdGpleGNsdXNpb25zgaJlc3RhcnQYIWZsZW5ndGgZFooAAAI+anVtYgAAACdqdW1kYzJjbAARABCAAACqADibcQNjMnBhLmNsYWltLnYyAAAAAg9jYm9ypWNhbGdmc2hhMjU2aXNpZ25hdHVyZXhNc2VsZiNqdW1iZj0vYzJwYS91cm46YzJwYTpkNDVmMjcyMi0yZDU3LTQzNTctYjYzMS1lN2QxNjEyNDA0MDkvYzJwYS5zaWduYXR1cmVqaW5zdGFuY2VJRHgseG1wOmlpZDozNzVhMDNjNy1iZDJkLTRlMDktYjc4Yi1lMzA1YjA2ODc3N2JyY3JlYXRlZF9hc3NlcnRpb25zg6JjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFgg97Gr1Gmcd+ZnTf7RZv8MH5CHACIERy+VQkXO6/oThWmiY3VybHgqc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5hY3Rpb25zLnYyZGhhc2hYIM8hM0cO+4/LH5aQ827vWzSQPhfekYT/L4nykCdlJ7HromN1cmx4KXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaGFzaC5kYXRhZGhhc2hYIB8jQ+IjT2skQhiyQdzIZOC3SqydhoPy5LMwoOUv0PeVdGNsYWltX2dlbmVyYXRvcl9pbmZvo2RuYW1lb0FudGhyb3BpYyBGaWxlc2d2ZXJzaW9uZTEuMC4wa3NwZWNWZXJzaW9uZTIuNC4wAAAQOGp1bWIAAAAoanVtZGMyY3MAEQAQgAAAqgA4m3EDYzJwYS5zaWduYXR1cmUAAAAQCGNib3LShFkCEqIBJhghWQIKMIICBjCCAY2gAwIBAgIUQOWgCu7COdC+uIP6BkIFPWdVEwAwCgYIKoZIzj0EAwMwSTEXMBUGA1UEChMOQW50aHJvcGljLCBQQkMxLjAsBgNVBAMTJUFudGhyb3BpYyBDb250ZW50IENyZWRlbnRpYWxzIFJvb3QgQ0EwHhcNMjYwODA3MTg0MzU2WhcNMjgwODA2MTk0MzU2WjBEMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEpMCcGA1UEAxMgQW50aHJvcGljIENsYXVkZSBDb250ZW50IFNpZ25pbmcwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAASYegpry1AYBRTVNL1CpTlbROnY3dey+UrsF9C3phYrATN3ZHf93Mo8RQN0KOUuOn19P4oWNFWe5n2/She9N7eTo1gwVjAOBgNVHQ8BAf8EBAMCB4AwFQYDVR0lBA4wDAYKKwYBBAGD6F4CATAMBgNVHRMBAf8EAjAAMB8GA1UdIwQYMBaAFM5R4gSBTmRbI/jjxM+aP                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
