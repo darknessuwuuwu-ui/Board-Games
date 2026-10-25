@@ -1,4 +1,4 @@
-const CACHE='boardgames-v3';
+const CACHE='boardgames-v4';
 const SHELL=['./','index.html','icon-192.png','icon-512.png','icon-maskable-512.png','apple-touch-icon.png','favicon-32.png'];
 self.addEventListener('install',e=>{
   e.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)).catch(()=>{}).then(()=>self.skipWaiting()));
