@@ -531,9 +531,20 @@ main{flex:1;min-height:0;display:flex;flex-direction:column}
 .gpick{display:grid;gap:12px;margin:12px 0}
 #mGames .note{margin:6px 0 0}
 #mGames .mstep{margin-top:18px}
-#guideDom,#guideSn{flex:1;min-height:0;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+#guideDom,#guideSn,#guideMs{flex:1;min-height:0;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .guide .dex{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:8px 0 14px;--tw:22px}
 @media (prefers-reduced-motion:reduce){.fan .dt{animation:none}.dt{transition:none}}
+.mbtn.mnb{background:linear-gradient(180deg,#8b95a5,#4a5566);border-color:#c9d2e0;color:#fff}
+.mbtn.mnb .ms{color:#e3e9f3}
+#play .arena.mn{display:flex;flex-direction:column;gap:8px;container-type:normal;aspect-ratio:auto;overflow:auto;padding:2px 0;align-items:center}
+.mntop{display:flex;justify-content:space-between;width:min(100%,400px);font-weight:700;font-variant-numeric:tabular-nums;padding:0 6px;box-sizing:border-box}
+.mnbd{display:grid;gap:2px;width:min(100%,400px);container-type:inline-size;padding:4px;background:var(--rail);border-radius:10px;box-sizing:border-box;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.mc{display:grid;place-items:center;aspect-ratio:1;border-radius:4px;background:linear-gradient(160deg,#cfd6e0,#9aa5b5);font-weight:800;font-size:calc(100cqw / var(--w) * .55);line-height:1;color:#222;cursor:pointer}
+.mc.r{background:#e9e3d0;cursor:default}.mc.x{background:#e0554a}
+.mc.n1{color:#1d6fd6}.mc.n2{color:#2e8b3c}.mc.n3{color:#d83a3a}.mc.n4{color:#6a3db0}.mc.n5{color:#a8541b}.mc.n6{color:#17958f}.mc.n7{color:#222}.mc.n8{color:#777}
+.btn[aria-pressed="true"]{outline:2px solid var(--brass)}
+.mbg{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);left:12px;z-index:45;min-height:36px;padding:0 12px}
+.mrefresh{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:12px;z-index:45;min-height:36px;padding:0 12px}
 /* ===== Snake ===== */
 .mbtn.snk{background:linear-gradient(180deg,#3fae6e,#1d6b43);border-color:#7be3a6;color:#eafff2}
 .mbtn.snk .ms{color:#c9f0d9}
@@ -847,6 +858,16 @@ main{flex:1;min-height:0;display:flex;flex-direction:column}
         </ul>
       </section>
     </article>
+    <article id="guideMs" class="guide" hidden>
+      <h1>Guía de Buscaminas</h1>
+      <p class="lead">Despeja todas las casillas seguras sin pisar ninguna mina. En esta mesa es una carrera: todos juegan el mismo tablero y gana quien lo termina primero.</p>
+      <section><h2>Controles</h2>
+        <ul><li>Toca una casilla con ⛏ Cavar para destaparla.</li><li>Cambia a 🚩 Bandera para marcar minas, o deja pulsada una casilla (clic derecho en ordenador).</li><li>Cada número indica cuántas minas hay en las 8 casillas vecinas.</li></ul></section>
+      <section><h2>Rondas</h2>
+        <ul><li>Todos empiezan con la misma zona abierta y el cronómetro corre para todos.</li><li>Quien limpia el tablero primero gana la ronda y suma un punto.</li><li>Si alguien pisa una mina, la ronda termina: gana quien lleve más casillas despejadas.</li><li>Gana la partida quien llegue primero a las rondas elegidas.</li></ul></section>
+      <section><h2>Dificultades</h2>
+        <ul><li>Fácil: 9×9 con 10 minas.</li><li>Medio: 12×12 con 24 minas.</li><li>Difícil: 14×14 con 40 minas.</li></ul></section>
+    </article>
   </main>
 </div>
 
@@ -915,6 +936,8 @@ main{flex:1;min-height:0;display:flex;flex-direction:column}
 </div>
 
 <div id="menu" class="menu" role="dialog" aria-label="Menú principal">
+  <button class="mini mbg" data-menu="bg" aria-label="Abrir Novedades">📄 Novedades</button>
+  <button class="mini mrefresh" data-menu="refresh" aria-label="Actualizar la página">⟳ Actualizar</button>
   <div class="mwrap">
     <div id="mHome">
       <div class="fan" id="mFan" aria-hidden="true"></div>
@@ -923,10 +946,10 @@ main{flex:1;min-height:0;display:flex;flex-direction:column}
       <p class="ver ver-m">v1.1</p>
       <div class="mbtns">
         <button class="mbtn" id="mResume" data-menu="resume" hidden><span class="mt">Continuar partida</span></button>
-        <button class="mbtn gold" data-menu="solo"><span class="mt">Jugar solo</span><span class="ms">Elige entre póker y dominó</span></button>
+        <button class="mbtn gold" data-menu="solo"><span class="mt">Jugar solo</span><span class="ms">Póker, dominó, Snake o Buscaminas</span></button>
         <button class="mbtn felt" data-menu="mp"><span class="mt">Multijugador</span><span class="ms" id="mMpSub">Crea una mesa o únete con un código</span></button>
       </div>
-      <div class="msub"><button class="mini" data-menu="guide">Guía de póker</button><button class="mini" data-menu="guide-dom">Guía de dominó</button><button class="mini" data-menu="guide-snake">Guía de Snake</button></div>
+      <div class="msub"><button class="mini" data-menu="guides">📖 Guías</button></div>
     </div>
     <div id="mMp" class="panel mpanel" hidden>
       <div class="row"><button class="mini" data-menu="home">← Menú</button></div>
@@ -940,6 +963,30 @@ main{flex:1;min-height:0;display:flex;flex-direction:column}
       <div id="mFruit"></div>
       <div class="row sp" style="margin-top:16px"><button class="btn raise" data-menu="snake-go">Empezar</button></div>
     </div>
+    <div id="mGd" class="panel mpanel" hidden>
+      <div class="row"><button class="mini" data-menu="home">← Menú</button></div>
+      <h2>Guías</h2>
+      <p class="note">Elige la guía de reglas que quieres leer.</p>
+      <div class="gpick">
+        <button class="mbtn gold" data-menu="guide"><span class="mt">Póker</span><span class="ms">Guía de Texas Hold'em</span></button>
+        <button class="mbtn felt" data-menu="guide-dom"><span class="mt">Dominó</span><span class="ms">Guía de dominó</span></button>
+        <button class="mbtn snk" data-menu="guide-snake"><span class="mt">Snake</span><span class="ms">Guía de Snake</span></button>
+        <button class="mbtn mnb" data-menu="guide-mines"><span class="mt">Buscaminas</span><span class="ms">Guía de Buscaminas</span></button>
+      </div>
+    </div>
+    <div id="mBg" class="panel mpanel" hidden>
+      <div class="row"><button class="mini" data-menu="home">← Menú</button></div>
+      <h2>Novedades</h2>
+      <div id="bgBody" style="white-space:pre-wrap;word-break:break-word;margin:10px 0;line-height:1.5"></div>
+      <div class="row"><label class="mini" style="cursor:pointer">Cargar BG.txt<input id="bgFile" type="file" accept=".txt,text/plain" hidden></label><button class="mini" data-menu="bg">Recargar</button></div>
+    </div>
+    <div id="mMn" class="panel mpanel" hidden>
+      <div class="row"><button class="mini" data-menu="solo">← Atrás</button></div>
+      <h2>Buscaminas</h2>
+      <p class="note">Gana quien limpie el tablero primero. Si alguien pisa una mina, termina la ronda.</p>
+      <div id="mDiff"></div>
+      <div class="row sp" style="margin-top:16px"><button class="btn raise" data-menu="mines-go">Empezar</button></div>
+    </div>
     <div id="mGames" class="panel mpanel" hidden>
       <div class="row"><button class="mini" data-menu="home">← Menú</button></div>
       <h2>Jugar solo</h2>
@@ -948,6 +995,7 @@ main{flex:1;min-height:0;display:flex;flex-direction:column}
         <button class="mbtn gold" data-menu="solo-poker"><span class="mt">Póker</span><span class="ms">Texas Hold'em contra bots</span></button>
         <button class="mbtn felt" data-menu="solo-domino"><span class="mt">Dominó</span><span class="ms">Doble seis, hasta 100 puntos</span></button>
         <button class="mbtn snk" data-menu="solo-snake"><span class="mt">Snake</span><span class="ms">Batalla de serpientes, gana por rondas</span></button>
+        <button class="mbtn mnb" data-menu="solo-mines"><span class="mt">Buscaminas</span><span class="ms">Carrera contra el reloj, 3 dificultades</span></button>
       </div>
       <div class="mstep"><button class="mini" data-menu="bd" aria-label="Menos bots">−</button><b id="mBots">3 bots</b><button class="mini" data-menu="bi" aria-label="Más bots">+</button></div>
     </div>
@@ -1683,6 +1731,7 @@ function commitProfile(){
   if(G.players[0]){G.players[0].name=G.profile.name;G.players[0].photo=effPhoto();}
   if(D.seats[0]&&NET.role!=='guest'){D.seats[0].name=G.profile.name;D.seats[0].photo=effPhoto();}
   if(SN.seats[0]&&NET.role!=='guest'){SN.seats[0].name=G.profile.name;SN.seats[0].photo=effPhoto();}
+  if(MS.seats[0]&&NET.role!=='guest'){MS.seats[0].name=G.profile.name;MS.seats[0].photo=effPhoto();}
   $('#sheetProfile').hidden=true;
 }
 function processPhoto(file){
@@ -1712,14 +1761,14 @@ function setRaise(v,fromSlider){
 }
 function humanTurn(){return G.waiting&&G.turn===0&&G.turnActive&&!G.result;}
 function showTab(name){
-  const g1=name==='guide',g2=name==='guideDom',g3=name==='guideSn',guide=g1||g2||g3;
+  const g1=name==='guide',g2=name==='guideDom',g3=name==='guideSn',g4=name==='guideMs',guide=g1||g2||g3||g4;
   playEl.hidden=guide;
   $('#guide').hidden=!g1;
   $('#guideDom').hidden=!g2;
-  $('#guideSn').hidden=!g3;
+  $('#guideSn').hidden=!g3;$('#guideMs').hidden=!g4;
   $('#tabPlay').setAttribute('aria-selected',String(!guide));
   $('#tabGuide').setAttribute('aria-selected',String(guide));
-  window.scrollTo(0,0);$('#guide').scrollTop=0;$('#guideDom').scrollTop=0;$('#guideSn').scrollTop=0;
+  window.scrollTo(0,0);$('#guide').scrollTop=0;$('#guideDom').scrollTop=0;$('#guideSn').scrollTop=0;$('#guideMs').scrollTop=0;
 }
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-act]');
@@ -1736,7 +1785,7 @@ document.addEventListener('click',e=>{
     else setRaise(Math.round((G.currentBet+parseFloat(v)*(potTotal()+t.toCall))/10)*10);
   }
   else if(a==='next'){startHand();}
-  else if(a==='newgame'){if(CUR==='snake')sNewMatch(false);else if(CUR==='domino')dNewMatch(false);else newGame();}
+  else if(a==='newgame'){if(CUR==='mines')mnNewMatch(false);else if(CUR==='snake')sNewMatch(false);else if(CUR==='domino')dNewMatch(false);else newGame();}
   else if(a==='mp'){NET.open();}
   else if(a==='snd'){SND.on=!SND.on;try{localStorage.setItem('poker.snd',SND.on?'1':'0');}catch(e){}if(SND.on)sfx('call');render();}
   else if(a==='chat'){CHAT.open();}
@@ -1749,12 +1798,12 @@ document.addEventListener('click',e=>{
   else if(a==='chipmenu'){$('#sheetChips').hidden=false;}
   else if(a==='close-sheet'){$('#sheetThemes').hidden=true;$('#sheetChips').hidden=true;}
   else if(a==='save-profile'){commitProfile();if(MENU.hasGame)render();}
-  else if(a==='newgame-profile'){commitProfile();if(CUR==='snake')sNewMatch(false);else if(CUR==='domino')dNewMatch(false);else newGame();}
+  else if(a==='newgame-profile'){commitProfile();if(CUR==='mines')mnNewMatch(false);else if(CUR==='snake')sNewMatch(false);else if(CUR==='domino')dNewMatch(false);else newGame();}
   else if(a==='photo-clear'){pendingPhoto='';paintPreview();}
   else if(a==='mc-import'){importSkinUser();}
   else if(a==='tab-play'){if(MENU.hasGame&&!curHold())showTab('play');else MENU.show('home');}
   else if(a==='menu'){MENU.show('home');}
-  else if(a==='tab-guide'){showTab(CUR==='domino'?'guideDom':(CUR==='snake'?'guideSn':'guide'));}
+  else if(a==='tab-guide'){showTab(CUR==='mines'?'guideMs':CUR==='domino'?'guideDom':(CUR==='snake'?'guideSn':'guide'));}
   else if(a==='goto'){const el=document.getElementById(b.dataset.v);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
 });
 document.addEventListener('input',e=>{
@@ -1898,7 +1947,7 @@ document.addEventListener('keydown',e=>{
 
 /*==NET: multijugador con sala de 4 letras (PeerJS, sin pegar códigos largos)==*/
 let CUR='poker';
-const _r=render;render=function(){if(CUR==='snake'){sRender();sBc();return;}if(CUR==='domino'){dRender();dBc();return;}_r();NET.bc();};
+const _r=render;render=function(){if(CUR==='mines'){mnRender();mnBc();return;}if(CUR==='snake'){sRender();sBc();return;}if(CUR==='domino'){dRender();dBc();return;}_r();NET.bc();};
 const PEER_SRC=['https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js','https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js'];
 const PCFG={config:{iceServers:[{urls:['stun:stun.l.google.com:19302','stun:stun1.l.google.com:19302','stun:stun.cloudflare.com:3478']},{urls:['turn:openrelay.metered.ca:80','turn:openrelay.metered.ca:443','turn:openrelay.metered.ca:443?transport=tcp'],username:'openrelayproject',credential:'openrelayproject'}]}};
 function loadPeer(){
@@ -1951,7 +2000,7 @@ const NET={on:false,room:false,role:'',mode:'',code:'',peers:{},peer:null,ch:nul
   cast(n,x,from){for(const i in this.peers){const q=this.peers[i];try{if(q.ch.open)q.ch.send({t:'c',n:n,x:x,me:+i===from});}catch(e){}}},
   link(){const base=/^https?:/.test(location.protocol)?location.origin+location.pathname:location.href.split('#')[0];return base+'#sala='+this.code;},
   open(){if(!this.mode&&this.role)this.mode=this.role;MENU.show('mp');},
-  roomHTML(){if(this.game==='snake')return sRoomHTML();
+  roomHTML(){if(this.game==='mines')return mnRoomHTML();if(this.game==='snake')return sRoomHTML();
     let h='<p style="margin:16px 0 8px;font-weight:600">Ajustes de la mesa</p>';
     if(this.game==='domino'){
       h+='<div class="pf"><label>Puntos para ganar</label><div class="pair">'+DTARGETS.map(v=>'<button class="mini" data-mp="target" data-v="'+v+'" aria-pressed="'+(D.tp===v)+'">'+v+'</button>').join('')+'</div></div>';
@@ -1962,8 +2011,8 @@ const NET={on:false,room:false,role:'',mode:'',code:'',peers:{},peer:null,ch:nul
     if(!G.hold)h+='<p class="note">Los ajustes nuevos se aplican al empezar una partida nueva.</p>';
     return h;
   },
-  bots(d){const np=Object.keys(this.peers).length,dm=this.game==='domino',sn=this.game==='snake';if(this.nb==null)this.nb=sn?SN.botN:(dm?D.botN:G.botN);this.nb=Math.max(0,Math.min(3-np,this.nb+d));if(sn){if(SN.hold){SN.botN=this.nb;sSave();sNewMatch(true);}}else if(dm){if(D.hold){D.botN=this.nb;dSave();dNewMatch(true);}}else if(G.hold){G.botN=this.nb;saveCfg();newGame(true);}this.paint();},
-  listHTML(){if(this.game==='snake')return sListHTML();
+  bots(d){const np=Object.keys(this.peers).length,dm=this.game==='domino',sn=this.game==='snake',mn=this.game==='mines';if(this.nb==null)this.nb=mn?MS.botN:sn?SN.botN:(dm?D.botN:G.botN);this.nb=Math.max(0,Math.min(3-np,this.nb+d));if(mn){if(MS.hold){MS.botN=this.nb;mnSave();mnNewMatch(true);}}else if(sn){if(SN.hold){SN.botN=this.nb;sSave();sNewMatch(true);}}else if(dm){if(D.hold){D.botN=this.nb;dSave();dNewMatch(true);}}else if(G.hold){G.botN=this.nb;saveCfg();newGame(true);}this.paint();},
+  listHTML(){if(this.game==='mines')return mnListHTML();if(this.game==='snake')return sListHTML();
     if(this.game==='domino'){
       let r='';
       D.seats.forEach(p=>{
@@ -1991,7 +2040,7 @@ const NET={on:false,room:false,role:'',mode:'',code:'',peers:{},peer:null,ch:nul
     const busy=this.busy?'<p class="note">'+esc(this.busy)+'</p>':'';
     let back='';
     if(this.role==='guest'){
-      h='<p>Conectado a la mesa.</p>'+this.listHTML()+(this.game==='snake'?'<p class="note">Gana quien gane '+SN.target+' rondas</p>':this.game==='domino'?'<p class="note">Gana quien llegue a '+D.target+' puntos</p>':'<p class="note">Ciegas '+SB+'/'+BB+'</p>')+'<div class="row"><button class="mini" data-mp="leave">Salir de la mesa</button></div>';
+      h='<p>Conectado a la mesa.</p>'+this.listHTML()+(this.game==='snake'?'<p class="note">Gana quien gane '+SN.target+' rondas</p>':this.game==='mines'?'<p class="note">'+MN_DIFF[MS.df].n+' · gana quien gane '+MS.target+' rondas</p>':this.game==='domino'?'<p class="note">Gana quien llegue a '+D.target+' puntos</p>':'<p class="note">Ciegas '+SB+'/'+BB+'</p>')+'<div class="row"><button class="mini" data-mp="leave">Salir de la mesa</button></div>';
     }else if(m==='join'){
       back='<div class="row" style="justify-content:flex-start;margin:0 0 8px"><button class="mini" data-mp="back">← Atrás</button></div>';
       h='<p class="note">Escribe el código de 4 letras que te dio el anfitrión.</p><input id="mpIn" maxlength="4" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABCD" style="width:100%;text-align:center;font:700 40px/1.2 var(--f-display);letter-spacing:.2em;text-transform:uppercase;background:#0a1a16;color:var(--text);border:1px solid var(--line);border-radius:12px;padding:8px;margin:8px 0">'+err+busy+'<div class="row sp"><button class="btn raise" data-mp="go"'+(this.busy?' disabled':'')+'>Unirme</button></div>';
@@ -2004,14 +2053,14 @@ const NET={on:false,room:false,role:'',mode:'',code:'',peers:{},peer:null,ch:nul
       }
     }else if(m==='pick'){
       back='<div class="row" style="justify-content:flex-start;margin:0 0 8px"><button class="mini" data-mp="back">← Atrás</button></div>';
-      h='<p class="note">Elige el juego de tu mesa. Quienes se unan juegan el mismo.</p><div class="gpick"><button class="mbtn gold" data-mp="host-poker"><span class="mt">Póker</span><span class="ms">Texas Hold\'em con ciegas</span></button><button class="mbtn felt" data-mp="host-domino"><span class="mt">Dominó</span><span class="ms">Doble seis, tú eliges los puntos</span></button><button class="mbtn snk" data-mp="host-snake"><span class="mt">Snake</span><span class="ms">Batalla de serpientes por rondas</span></button></div>';
+      h='<p class="note">Elige el juego de tu mesa. Quienes se unan juegan el mismo.</p><div class="gpick"><button class="mbtn gold" data-mp="host-poker"><span class="mt">Póker</span><span class="ms">Texas Hold\'em con ciegas</span></button><button class="mbtn felt" data-mp="host-domino"><span class="mt">Dominó</span><span class="ms">Doble seis, tú eliges los puntos</span></button><button class="mbtn snk" data-mp="host-snake"><span class="mt">Snake</span><span class="ms">Batalla de serpientes por rondas</span></button><button class="mbtn mnb" data-mp="host-mines"><span class="mt">Buscaminas</span><span class="ms">Carrera contra el reloj, por rondas</span></button></div>';
     }else{
       h='<p class="note">Crea una mesa y comparte el enlace o un código de 4 letras: tus amigos solo lo abren y entran. Hasta 4 jugadores y hace falta internet.</p>'+err+'<div class="row sp"><button class="btn call" data-mp="host">Crear mesa</button><button class="btn raise" data-mp="join">Unirme</button></div>';
     }
     if(this.role==='host'&&this.room&&m!=='join'){
       const mx=3-np;
-      const dm=this.game==='domino',sn=this.game==='snake',HOLD=sn?SN.hold:(dm?D.hold:G.hold);
-      if(this.nb==null)this.nb=sn?SN.botN:(dm?D.botN:G.botN);this.nb=Math.max(0,Math.min(mx,this.nb));
+      const dm=this.game==='domino',sn=this.game==='snake',mn=this.game==='mines',HOLD=mn?MS.hold:sn?SN.hold:(dm?D.hold:G.hold);
+      if(this.nb==null)this.nb=mn?MS.botN:sn?SN.botN:(dm?D.botN:G.botN);this.nb=Math.max(0,Math.min(mx,this.nb));
       h+=this.roomHTML();
       h+='<p style="margin:16px 0 0">Bots en la mesa</p><div class="row sp" style="align-items:center;justify-content:center"><button class="mini" data-mp="bm" aria-label="Menos bots">−</button><b style="min-width:70px;text-align:center">'+this.nb+(this.nb===1?' bot':' bots')+'</b><button class="mini" data-mp="bp" aria-label="Más bots">+</button></div>';
       if(HOLD)h+='<div class="row sp"><button class="btn raise" data-mp="start">Empezar partida</button></div><p class="note">Empieza cuando quieras. Si la mesa se llena, quien entre ocupa el lugar de un bot.</p>';
@@ -2044,7 +2093,7 @@ const NET={on:false,room:false,role:'',mode:'',code:'',peers:{},peer:null,ch:nul
   },
   incoming(c){
     const fr=[1,2,3].filter(i=>!this.peers[i]);
-    const s=fr.find(i=>{const a=this.game==='domino'?D.seats:(this.game==='snake'?SN.seats:G.players);return a[i]&&a[i].empty;})||fr[0];
+    const s=fr.find(i=>{const a=this.game==='mines'?MS.seats:this.game==='domino'?D.seats:(this.game==='snake'?SN.seats:G.players);return a[i]&&a[i].empty;})||fr[0];
     if(s==null){c.on('open',()=>{try{c.send({t:'full'});}catch(x){}setTimeout(()=>{try{c.close();}catch(x){}},500);});return;}
     this.peers[s]={ch:c,name:String((c.metadata&&c.metadata.name)||'Jugador').slice(0,14),photo:'',sent:{}};
     c.on('open',()=>this.up(s,c));
@@ -2055,7 +2104,7 @@ const NET={on:false,room:false,role:'',mode:'',code:'',peers:{},peer:null,ch:nul
   },
   up(s,c){
     const q=this.peers[s];if(!q||q.ch!==c)return;
-    if(this.game==='snake'){sUp(s,c);return;}
+    if(this.game==='mines'){mnUp(s,c);return;}if(this.game==='snake'){sUp(s,c);return;}
     if(this.game==='domino'){dUp(s,c);return;}
     this.on=true;this.role='host';
     const p=G.players[s];p.rem=true;p.human=false;p.gone=false;p.name=q.name;p.photo='';p.key='n:'+String(q.name).toLowerCase();p.crown=!!G.crownKey&&p.key===G.crownKey;
@@ -2067,7 +2116,7 @@ const NET={on:false,room:false,role:'',mode:'',code:'',peers:{},peer:null,ch:nul
   },
   drop(s,c){
     const q=this.peers[s];if(!q||q.ch!==c)return;
-    delete this.peers[s];if(this.game==='snake'){this.on=Object.keys(this.peers).length>0;sDrop(s);return;}if(this.game==='domino'){this.on=Object.keys(this.peers).length>0;dDrop(s);return;}const p=G.players[s];
+    delete this.peers[s];if(this.game==='mines'){this.on=Object.keys(this.peers).length>0;mnDrop(s);return;}if(this.game==='snake'){this.on=Object.keys(this.peers).length>0;sDrop(s);return;}if(this.game==='domino'){this.on=Object.keys(this.peers).length>0;dDrop(s);return;}const p=G.players[s];
     if(p&&p.rem){p.rem=false;p.gone=true;log(p.name+' salió de la mesa');if(G.turnActive&&G.turn===s&&!G.result)G.timer=setTimeout(()=>botAct(s),600);}
     this.on=Object.keys(this.peers).length>0;
     render();this.paint();
@@ -2075,7 +2124,7 @@ const NET={on:false,room:false,role:'',mode:'',code:'',peers:{},peer:null,ch:nul
   msg(s,d){
     let m=d;if(typeof d==='string'){try{m=JSON.parse(d);}catch(x){return;}}
     if(!m||typeof m!=='object')return;
-    if(this.game==='snake'){sMsg(s,m);return;}
+    if(this.game==='mines'){mnMsg(s,m);return;}if(this.game==='snake'){sMsg(s,m);return;}
     if(this.game==='domino'){dMsg(s,m);return;}
     const p=G.players[s],q=this.peers[s];if(!p||!q)return;
     if(m.t==='hi'){
@@ -2106,7 +2155,7 @@ const NET={on:false,room:false,role:'',mode:'',code:'',peers:{},peer:null,ch:nul
         this.send({t:'hi',name:G.profile.name,photo:await mini(effPhoto())});
         playEl.innerHTML='<p class="note" style="padding:40px 0;text-align:center">Entrando a la mesa…</p>';MENU.hasGame=true;MENU.hide();this.paint();
       });
-      c.on('data',m=>{if(!m||typeof m!=='object')return;if(m.t==='s')apply(m.d);else if(m.t==='ds')dApply(m.d);else if(m.t==='ss')sApply(m.d);else if(m.t==='c')CHAT.add(String(m.n||'').slice(0,14),String(m.x||'').slice(0,200),m.me);else if(m.t==='full')this.leave('La mesa está llena.');});
+      c.on('data',m=>{if(!m||typeof m!=='object')return;if(m.t==='s')apply(m.d);else if(m.t==='ds')dApply(m.d);else if(m.t==='ss')sApply(m.d);else if(m.t==='ms')mnApply(m.d);else if(m.t==='c')CHAT.add(String(m.n||'').slice(0,14),String(m.x||'').slice(0,200),m.me);else if(m.t==='full')this.leave('La mesa está llena.');});
       c.on('close',()=>{if(this.role==='guest')this.leave('El anfitrión cerró la mesa.');else fail('No se pudo conectar con el anfitrión. Prueba otra vez.');});
       c.on('error',()=>fail('No se pudo conectar con el anfitrión.'));
     });
@@ -2118,8 +2167,8 @@ const NET={on:false,room:false,role:'',mode:'',code:'',peers:{},peer:null,ch:nul
     try{if(this.ch)this.ch.close();}catch(x){}
     try{if(this.peer)this.peer.destroy();}catch(x){}
     this.peer=null;this.ch=null;this.role='';this.on=false;this.room=false;this.mode='';this.code='';this.busy='';this.err=msg||'';this.nb=null;
-    G.hold=false;D.hold=false;SN.hold=false;
-    if(was||wasHold){G.over=null;G.lobby=false;D.over=null;D.lobby=false;SN.over=null;SN.lobby=false;MENU.hasGame=false;}else if(MENU.hasGame&&curSeats().length)render();
+    G.hold=false;D.hold=false;SN.hold=false;MS.hold=false;
+    if(was||wasHold){G.over=null;G.lobby=false;D.over=null;D.lobby=false;SN.over=null;SN.lobby=false;MS.over=null;MS.lobby=false;MENU.hasGame=false;}else if(MENU.hasGame&&curSeats().length)render();
     if(!quiet)MENU.show(msg?'mp':'home');
     this.paint();
   },
@@ -2135,6 +2184,9 @@ document.addEventListener('click',async e=>{
     if(a==='close')MENU.show('home');
     else if(a==='host'){N.mode='pick';N.err='';N.busy='';N.paint();}
     else if(a==='host-poker'){N.game='poker';if(!(CUR==='poker'&&G.lobby&&MENU.hasGame&&!G.hold))newGame(true);await N.host();}
+    else if(a==='host-mines'){N.game='mines';if(!(CUR==='mines'&&MS.lobby&&MENU.hasGame&&!MS.hold))mnNewMatch(true);await N.host();}
+    else if(a==='mtarget'){MS.tp=+b.dataset.v||3;MS.target=MS.tp;mnSave();N.paint();if(CUR==='mines'&&MENU.hasGame)render();}
+    else if(a==='mdiff'){MS.dfp=+b.dataset.v||0;mnSave();if(MS.phase==='idle')MS.df=MS.dfp;N.paint();if(CUR==='mines'&&MENU.hasGame)render();}
     else if(a==='host-snake'){N.game='snake';if(!(CUR==='snake'&&SN.lobby&&MENU.hasGame&&!SN.hold))sNewMatch(true);await N.host();}
     else if(a==='host-domino'){N.game='domino';if(!(CUR==='domino'&&D.lobby&&MENU.hasGame&&!D.hold))dNewMatch(true);await N.host();}
     else if(a==='fruit'){SN.fruit=+b.dataset.v||0;sSave();N.paint();if(CUR==='snake'&&MENU.hasGame)render();}
@@ -2145,9 +2197,9 @@ document.addEventListener('click',async e=>{
     else if(a==='back')N.back();
     else if(a==='bm')N.bots(-1);
     else if(a==='bp')N.bots(1);
-    else if(a==='apply'){if(N.game==='snake'){SN.botN=N.nb;sSave();N.nb=null;sNewMatch(false);}else if(N.game==='domino'){D.botN=N.nb;dSave();N.nb=null;dNewMatch(false);}else{G.botN=N.nb;saveCfg();N.nb=null;newGame();}}
+    else if(a==='apply'){if(N.game==='mines'){MS.botN=N.nb;mnSave();N.nb=null;mnNewMatch(false);}else if(N.game==='snake'){SN.botN=N.nb;sSave();N.nb=null;sNewMatch(false);}else if(N.game==='domino'){D.botN=N.nb;dSave();N.nb=null;dNewMatch(false);}else{G.botN=N.nb;saveCfg();N.nb=null;newGame();}}
     else if(a==='blind')setRoom('blind',+b.dataset.v);
-    else if(a==='start'){if(N.game==='snake'){SN.hold=false;SN.lobby=false;N.nb=null;MENU.hide();sStartRound();}else if(N.game==='domino'){D.hold=false;D.lobby=false;N.nb=null;MENU.hide();dStartRound();}else{G.hold=false;G.lobby=false;N.nb=null;MENU.hide();startHand();}}
+    else if(a==='start'){if(N.game==='mines'){MS.hold=false;MS.lobby=false;N.nb=null;MENU.hide();mnStartRound();}else if(N.game==='snake'){SN.hold=false;SN.lobby=false;N.nb=null;MENU.hide();sStartRound();}else if(N.game==='domino'){D.hold=false;D.lobby=false;N.nb=null;MENU.hide();dStartRound();}else{G.hold=false;G.lobby=false;N.nb=null;MENU.hide();startHand();}}
     else if(a==='resume')MENU.resume();
     else if(a==='leave')N.leave();
     else if(a==='copy'){await navigator.clipboard.writeText(N.code);b.textContent='Copiado';}
@@ -2654,8 +2706,8 @@ try{const o=JSON.parse(localStorage.getItem('sn.cfg')||'{}');if(STARGETS.indexOf
 function sSave(){try{localStorage.setItem('sn.cfg',JSON.stringify({t:SN.tp,b:SN.botN,f:SN.fruit}));}catch(e){}}
 function sFruitHTML(kind){return '<div class="pf"><label>Fruta de Snake</label><div class="pair">'+SN_FRUITS.map((f,i)=>'<button class="mini" data-'+kind+'="fruit" data-v="'+i+'" aria-pressed="'+(SN.fruit===i)+'">'+f[1]+' '+f[0]+'</button>').join('')+'</div></div>';}
 function sFruitPaint(){const e=$('#mFruit');if(e)e.innerHTML=sFruitHTML('menu');}
-function curSeats(){return CUR==='domino'?D.seats:(CUR==='snake'?SN.seats:G.players);}
-function curHold(){return CUR==='domino'?D.hold:(CUR==='snake'?SN.hold:G.hold);}
+function curSeats(){return CUR==='mines'?MS.seats:CUR==='domino'?D.seats:(CUR==='snake'?SN.seats:G.players);}
+function curHold(){return CUR==='mines'?MS.hold:CUR==='domino'?D.hold:(CUR==='snake'?SN.hold:G.hold);}
 
 /* ---------- Motor ---------- */
 function sLog(m){SN.log.unshift(m);if(SN.log.length>60)SN.log.pop();}
@@ -2895,12 +2947,12 @@ function sDrop(s){
   sLog(p.name+' salió de la mesa');
   render();NET.paint();
 }
-function sListHTML(){
-  let r='';
-  SN.seats.forEach(p=>{
+function sListHTML(ss,me){
+  ss=ss||SN.seats;me=me==null?SN.me:me;let r='';
+  ss.forEach(p=>{
     if(p.empty)return;
     let tag;
-    if(NET.role==='guest')tag=p.i===SN.me?'tú':(p.i===0?'anfitrión':'');
+    if(NET.role==='guest')tag=p.i===me?'tú':(p.i===0?'anfitrión':'');
     else tag=p.i===0?'anfitrión':(p.gone?'salió':(p.rem?'jugador':'bot'));
     r+='<li style="display:flex;align-items:center;gap:10px;padding:5px 0"><span class="avatar" style="width:34px;height:34px;font-size:15px;flex:none;background:'+(p.photo?'#000':p.color)+'">'+avatarInner(p)+'</span><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis">'+esc(p.name)+'</span><small class="note">'+tag+'</small></li>';
   });
@@ -3077,32 +3129,296 @@ document.addEventListener('touchmove',e=>{
 document.addEventListener('touchend',()=>{SNSW=null;});
 
 /*==MENÚ DE INICIO==*/
+/*==BUSCAMINAS==*/
+const MN_DIFF=[{n:'Fácil',w:9,h:9,m:10,bt:1200},{n:'Medio',w:12,h:12,m:24,bt:900},{n:'Difícil',w:14,h:14,m:40,bt:700}];
+const MS={seats:[],hold:false,lobby:false,botN:3,target:3,tp:3,df:0,dfp:0,me:0,phase:'idle',round:0,log:[],result:null,over:null,timer:null,mines:null,o:0,w:9,h:9,nm:10,base:0,at:0,count:0,mode:'dig',bd:'',lp:0};
+try{const o=JSON.parse(localStorage.getItem('mn.cfg')||'{}');if(STARGETS.indexOf(o.t)>=0)MS.tp=o.t;if(o.b>=0&&o.b<=3)MS.botN=o.b|0;if(o.d>=0&&o.d<3){MS.dfp=o.d|0;MS.df=MS.dfp;}}catch(e){}
+function mnSave(){try{localStorage.setItem('mn.cfg',JSON.stringify({t:MS.tp,b:MS.botN,d:MS.dfp}));}catch(e){}}
+function mnDiffHTML(kind){const d=MN_DIFF[MS.dfp];return '<div class="pf"><label>Dificultad</label><div class="pair">'+MN_DIFF.map((x,i)=>'<button class="mini" data-'+kind+'="mdiff" data-v="'+i+'" aria-pressed="'+(MS.dfp===i)+'">'+x.n+'</button>').join('')+'</div><p class="note" style="margin:6px 0 0">'+d.w+'×'+d.h+' casillas · '+d.m+' minas</p></div>';}
+function mnPaint(){const e=$('#mDiff');if(e)e.innerHTML=mnDiffHTML('menu');}
+function mnRoomHTML(){return '<p style="margin:16px 0 8px;font-weight:600">Ajustes de la mesa</p><div class="pf"><label>Rondas para ganar</label><div class="pair">'+STARGETS.map(v=>'<button class="mini" data-mp="mtarget" data-v="'+v+'" aria-pressed="'+(MS.tp===v)+'">'+v+'</button>').join('')+'</div></div>'+mnDiffHTML('mp');}
+function mnListHTML(){return sListHTML(MS.seats,MS.me);}
+const mnLog=m=>{MS.log.unshift(m);if(MS.log.length>60)MS.log.pop();};
+const mnActive=()=>MS.seats.filter(s=>!s.empty&&!s.wait);
+const mnAuto=s=>!s.empty&&s.i!==0&&!s.rem;
+const mnEl=()=>MS.phase==='play'?MS.base+(performance.now()-MS.at):MS.base;
+const mnFmt=ms=>{const t=Math.floor(ms/1000);return String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0');};
+const mnTS=()=>MS.w*MS.h-MS.nm;
+function mnNb(i){const w=MS.w,x=i%w,y=(i/w)|0,o=[];for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){if(!dx&&!dy)continue;const nx=x+dx,ny=y+dy;if(nx>=0&&ny>=0&&nx<w&&ny<MS.h)o.push(ny*w+nx);}return o;}
+const mnNum=i=>mnNb(i).reduce((c,j)=>c+MS.mines[j],0);
+function mnGen(){
+  const n=MS.w*MS.h;MS.mines=new Uint8Array(n);MS.o=Math.floor(Math.random()*n);
+  const ex=new Set(mnNb(MS.o));ex.add(MS.o);let k=0;
+  while(k<MS.nm){const i=Math.floor(Math.random()*n);if(ex.has(i)||MS.mines[i])continue;MS.mines[i]=1;k++;}
+}
+function mnFlood(s,i){
+  const st=[i];
+  while(st.length){const c=st.pop();if(s.rv[c]||s.fl[c]||MS.mines[c])continue;s.rv[c]=1;s.cnt++;if(!mnNum(c))mnNb(c).forEach(j=>{if(!s.rv[j])st.push(j);});}
+}
+function mnReveal(s,i){
+  if(MS.phase!=='play'||s.st!=='play'||s.rv[i]||s.fl[i])return;
+  if(MS.mines[i]){s.rv[i]=1;s.st='lost';mnEnd('mine',s);return;}
+  mnFlood(s,i);
+  if(s.cnt>=mnTS()){s.st='done';s.tm=mnEl();mnEnd('clear',s);}
+}
+function mnFlag(s,i){if(MS.phase!=='play'||s.st!=='play'||s.rv[i])return;s.fl[i]^=1;}
+function mnBot(s){
+  const n=MS.w*MS.h,fr=[],any=[];
+  for(let i=0;i<n;i++){if(s.rv[i])continue;any.push(i);if(mnNb(i).some(j=>s.rv[j]))fr.push(i);}
+  const pool=fr.length?fr:any,safe=pool.filter(i=>!MS.mines[i]),bad=pool.filter(i=>MS.mines[i]);
+  const pk=a=>a[Math.floor(Math.random()*a.length)];
+  const p=(bad.length&&Math.random()<[.012,.025,.04][MS.df])?pk(bad):(safe.length?pk(safe):null);
+  if(p!=null)mnReveal(s,p);
+}
+function mnNewMatch(hold){
+  if(NET.role==='guest')return;
+  clearTimeout(MS.timer);clearTimeout(G.timer);clearTimeout(D.timer);clearTimeout(SN.timer);
+  CUR='mines';NET.game='mines';
+  MS.target=(hold||NET.room)?MS.tp:3;MS.df=MS.dfp;
+  const np=Object.keys(NET.peers).length;let left=Math.max(0,Math.min(MS.botN,3-np));
+  MS.seats=[0,1,2,3].map(i=>({i:i,name:i===0?(G.profile.name||'Tú'):SN_BOTN[i],photo:i===0?effPhoto():'',color:SN_COL[i],empty:false,rem:false,gone:false,wait:false,score:0,cnt:0,st:'',tm:0,rv:null,fl:null,nx:0}));
+  for(const k in NET.peers){const p=MS.seats[k],q=NET.peers[k];if(p&&q.ch&&q.ch.open){p.rem=true;p.name=q.name;p.photo=q.photo||'';}}
+  for(const i of [2,1,3]){const p=MS.seats[i];if(p.rem)continue;if(left>0)left--;else p.empty=true;}
+  MS.me=0;MS.round=0;MS.log=[];MS.result=null;MS.over=null;MS.phase='idle';MS.count=0;MS.base=0;MS.bd='';
+  MENU.hasGame=true;
+  if(hold){MS.hold=true;MS.lobby=true;render();return;}
+  MS.hold=false;MENU.hide();mnStartRound();
+}
+function mnSolo(){if(NET.role||NET.room)NET.leave(null,true);MS.botN=MENU.sb;mnSave();mnNewMatch(false);}
+function mnStartRound(){
+  if(NET.role==='guest')return;
+  clearTimeout(MS.timer);
+  MS.seats.forEach(s=>{if(!s.empty)s.wait=false;});
+  const act=mnActive();
+  if(act.length<2){MS.lobby=true;MS.phase='idle';render();return;}
+  const d=MN_DIFF[MS.df];MS.w=d.w;MS.h=d.h;MS.nm=d.m;
+  MS.lobby=false;MS.round++;MS.result=null;
+  MS.seats.forEach(s=>{s.st='';s.cnt=0;s.rv=null;s.fl=null;s.tm=0;});
+  act.forEach(s=>{s.rv=new Uint8Array(d.w*d.h);s.fl=new Uint8Array(d.w*d.h);s.st='play';});
+  mnGen();
+  MS.phase='count';MS.count=3;MS.base=0;MS.at=performance.now();sfx('beep');mnLog('Ronda '+MS.round+' · '+d.n);
+  render();mnCountdown();
+}
+function mnCountdown(){
+  clearTimeout(MS.timer);
+  MS.timer=setTimeout(()=>{
+    if(NET.role==='guest'||MS.phase!=='count')return;
+    MS.count--;
+    if(MS.count<=0){
+      MS.count=0;MS.phase='play';MS.base=0;MS.at=performance.now();
+      MS.seats.forEach(s=>{if(s.st==='play'){mnFlood(s,MS.o);s.nx=400+Math.random()*600;}});
+      sfx('go');render();mnLoop();
+    }else{sfx('beep');render();mnCountdown();}
+  },700);
+}
+function mnLoop(){
+  clearTimeout(MS.timer);
+  if(NET.role==='guest'||MS.phase!=='play')return;
+  const el=mnEl();
+  MS.seats.forEach(s=>{if(MS.phase==='play'&&s.st==='play'&&mnAuto(s)&&el>=s.nx){mnBot(s);s.nx=el+MN_DIFF[MS.df].bt*(.6+Math.random()*.8)*(1+s.i*.12);}});
+  if(MS.phase==='play'){render();MS.timer=setTimeout(mnLoop,250);}
+}
+function mnEnd(kind,who){
+  clearTimeout(MS.timer);
+  const tm=mnEl();MS.base=tm;
+  let w=-1;
+  if(kind==='clear')w=who.i;
+  else{let best=-1,c=0;MS.seats.forEach(s=>{if(s!==who&&s.st==='play'){if(s.cnt>best){best=s.cnt;c=1;w=s.i;}else if(s.cnt===best)c++;}});if(c!==1)w=-1;}
+  MS.phase='round';
+  if(w>=0)MS.seats[w].score++;
+  MS.result={kind:kind,who:who.i,winner:w,tm:tm};
+  mnLog(kind==='clear'?who.name+' limpió el tablero en '+mnFmt(tm):who.name+' pisó una mina');
+  if(w>=0&&MS.seats[w].score>=MS.target){MS.phase='over';MS.over={winner:w};}
+  sfx(kind==='mine'&&who.i===MS.me?'die':(w===MS.me?'swin':'slose'));
+  render();
+}
+function mnBoard(p){
+  if(!p||!p.rv)return '';
+  const rd=MS.phase!=='play',o=[];
+  for(let i=0;i<MS.w*MS.h;i++){
+    if(MS.phase==='count'){o.push('.');continue;}
+    if(p.rv[i])o.push(MS.mines[i]?'#':String(mnNum(i)));
+    else if(p.fl[i])o.push(rd&&!MS.mines[i]?'X':'F');
+    else o.push(rd&&MS.mines[i]?'*':'.');
+  }
+  return o.join('');
+}
+/* ---------- Red ---------- */
+function mnSnap(s,q){
+  const seats=MS.seats.map(p=>{
+    const ph=p.i===0?NET.hm:(p.photo||'');
+    const o={i:p.i,name:p.name,color:p.color,empty:p.empty,rem:p.rem,gone:p.gone,wait:p.wait,score:p.score,cnt:p.cnt,st:p.st,tm:p.tm,photo:(q&&q.sent[p.i]===ph)?undefined:ph};
+    if(q)q.sent[p.i]=ph;return o;
+  });
+  return{df:MS.df,w:MS.w,h:MS.h,nm:MS.nm,el:mnEl(),seats:seats,me:s,bd:mnBoard(MS.seats[s]),phase:MS.phase,count:MS.count,round:MS.round,target:MS.target,lobby:MS.lobby,log:MS.log.slice(0,30),result:MS.result,over:MS.over};
+}
+function mnBc(){
+  if(NET.role!=='host')return;
+  const ph=MS.seats[0]?MS.seats[0].photo||'':'';
+  if(NET._hs!==ph){NET._hs=ph;mini(ph).then(x=>{NET.hm=x;mnBc();});}
+  for(const i in NET.peers){const q=NET.peers[i];try{if(q.ch.open)q.ch.send({t:'ms',d:mnSnap(+i,q)});}catch(e){}}
+}
+function mnApply(o){
+  const oldPh=MS.phase,oldCnt=MS.count;
+  CUR='mines';NET.game='mines';
+  o.seats.forEach((p,k)=>{if(p.photo===undefined)p.photo=(MS.seats[k]&&MS.seats[k].photo)||'';});
+  Object.assign(MS,{df:o.df,w:o.w,h:o.h,nm:o.nm,seats:o.seats,me:o.me,bd:o.bd,phase:o.phase,count:o.count,round:o.round,target:o.target,lobby:o.lobby,log:o.log,result:o.result,over:o.over,base:o.el,at:performance.now()});
+  if(MS.phase==='count'&&(oldPh!=='count'||MS.count!==oldCnt))sfx('beep');
+  else if(MS.phase==='play'&&oldPh==='count')sfx('go');
+  else if((MS.phase==='round'||MS.phase==='over')&&oldPh==='play')sfx(MS.result&&MS.result.kind==='mine'&&MS.result.who===MS.me?'die':(MS.result&&MS.result.winner===MS.me?'swin':'slose'));
+  MENU.hasGame=true;render();
+}
+function mnMsg(s,m){
+  const p=MS.seats[s],q=NET.peers[s];if(!p||!q)return;
+  if(m.t==='hi'){
+    q.name=String(m.name||'Jugador').slice(0,14);
+    q.photo=(typeof m.photo==='string'&&m.photo.indexOf('data:image/')===0&&m.photo.length<20000)?m.photo:'';
+    p.name=q.name;p.photo=q.photo;render();NET.paint();
+  }else if(m.t==='chat'&&typeof m.x==='string'){
+    const x=m.x.slice(0,200);if(!x.trim()||x.charAt(0)==='/')return;
+    CHAT.add(q.name,x,false);NET.cast(q.name,x,s);
+  }else if(m.t==='mm'&&Number.isInteger(m.c)&&m.c>=0&&m.c<MS.w*MS.h){
+    if(m.k==='r')mnReveal(p,m.c);else if(m.k==='f')mnFlag(p,m.c);
+    render();
+  }
+}
+function mnUp(s,c){
+  const q=NET.peers[s];if(!q||q.ch!==c)return;
+  NET.on=true;NET.role='host';
+  const p=MS.seats[s];
+  p.rem=true;p.gone=false;p.name=q.name;p.photo='';
+  if(p.empty){p.empty=false;p.score=0;p.cnt=0;p.st='';p.rv=null;p.fl=null;p.wait=MS.phase==='play'||MS.phase==='count';}
+  mnLog(q.name+' se unió a la mesa');
+  if(MS.lobby&&!MS.hold){MS.lobby=false;clearTimeout(MS.timer);MS.timer=setTimeout(mnStartRound,1600);}
+  render();NET.paint();
+}
+function mnDrop(s){
+  const p=MS.seats[s];if(!p)return;
+  p.rem=false;
+  if(MS.hold){mnNewMatch(true);NET.paint();return;}
+  p.gone=true;if(p.st==='play')p.st='';
+  if(p.wait){p.empty=true;p.wait=false;}
+  mnLog(p.name+' salió de la mesa');
+  render();NET.paint();
+}
+/* ---------- Interfaz ---------- */
+function mnCardHTML(p){
+  if(p.empty)return '<div class="snp ghost"></div>';
+  const playing=(MS.phase==='play'||MS.phase==='round'||MS.phase==='over')&&!p.wait&&(p.st||p.cnt);
+  const st=p.wait?' · ⏳':(p.st==='done'?' · ✅ '+mnFmt(p.tm):(p.st==='lost'?' · 💥':(playing?' · '+Math.round(p.cnt/mnTS()*100)+'%':'')));
+  const av='<div class="avatar" style="background:'+(p.photo?'#000':p.color)+'">'+avatarInner(p)+'</div>';
+  return '<div class="snp'+(p.i===MS.me?' me':'')+(p.st==='lost'?' dead':'')+'" style="--c:'+p.color+'">'+av+'<div class="nm">'+esc(p.name)+'</div><div class="stack">🏆 '+p.score+st+'</div></div>';
+}
+function mnActionsHTML(){
+  const guest=NET.role==='guest',me=MS.seats[MS.me];
+  if(MS.over)return '<section class="actions"><p class="status">Partida terminada.</p></section>';
+  if(MS.lobby||MS.phase==='idle'){
+    if(guest)return '<section class="actions"><h3>Esperando al anfitrión…</h3><p class="muted">La partida empieza en cuanto el anfitrión la inicie.</p></section>';
+    return '<section class="actions"><h3>Esperando jugadores…</h3>'+(NET.room?'<p class="muted">Código de la mesa: <b>'+esc(NET.code)+'</b>. La partida empieza cuando entre alguien.</p><button class="btn raise" data-act="mp">Compartir mesa</button>':'<p class="muted">Estás solo en la mesa. Invita a alguien o añade bots.</p><button class="btn raise" data-act="mp">Invitar jugadores</button>')+'</section>';
+  }
+  if(MS.phase==='round'){
+    const r=MS.result,w=r&&r.winner>=0?MS.seats[r.winner]:null,who=MS.seats[r.who];
+    const head=r.kind==='clear'?(who.i===MS.me?'¡Terminaste primero!':esc(who.name)+' terminó primero'):(who.i===MS.me?'¡Pisaste una mina!':esc(who.name)+' pisó una mina');
+    const det=(r.kind==='clear'?'Tiempo: '+mnFmt(r.tm)+'. ':'La ronda se acaba. ')+(w?(w.i===MS.me?'Sumas un punto.':'Punto para '+esc(w.name)+'.'):'Nadie suma punto.');
+    return '<section class="actions"><h3>'+head+'</h3><p class="muted">'+det+'</p>'+(guest?'<p class="status">Esperando al anfitrión…</p>':'<button class="btn raise" data-mn="next">Siguiente ronda</button>')+'</section>';
+  }
+  if(me&&me.wait)return '<section class="actions"><p class="status">Entras en la siguiente ronda</p></section>';
+  if(MS.phase==='count')return '<section class="actions"><p class="status">Prepárate… '+MS.count+'</p></section>';
+  if(me&&me.st!=='play')return '<section class="actions"><p class="status">Esperando el final de la ronda…</p></section>';
+  return '<section class="actions mine"><div class="btns two"><button class="btn call" data-mn="dig" aria-pressed="'+(MS.mode==='dig')+'"><span class="t">⛏ Cavar</span></button><button class="btn call" data-mn="flag" aria-pressed="'+(MS.mode==='flag')+'"><span class="t">🚩 Bandera</span></button></div></section>';
+}
+function mnBoardHTML(){
+  const bd=MS.bd||'.'.repeat(MS.w*MS.h);let h='<div class="mnbd" style="--w:'+MS.w+';grid-template-columns:repeat('+MS.w+',1fr)">';
+  for(let i=0;i<bd.length;i++){
+    const c=bd[i];let cl='mc',t='';
+    if(c==='F')t='🚩';else if(c==='*'){cl+=' r';t='💣';}else if(c==='#'){cl+=' r x';t='💥';}else if(c==='X'){t='❌';}
+    else if(c!=='.'){cl+=' r n'+c;t=c==='0'?'':c;}
+    h+='<b class="'+cl+'" data-mi="'+i+'">'+t+'</b>';
+  }
+  return h+'</div>';
+}
+function mnRender(){
+  const me=MS.seats[MS.me];
+  if(!me){playEl.innerHTML='<p class="note" style="padding:40px 0;text-align:center">Entrando a la mesa…</p>';playEl.dataset.sg='';return;}
+  if(NET.role!=='guest')MS.bd=mnBoard(me);
+  const sig=[MS.phase,MS.round,MS.count,MS.lobby,MS.hold,!!MS.over,CHAT.unread,SND.on,NET.on||NET.room,NET.role,MS.me,MS.target,MS.mode,MS.bd,MS.seats.map(s=>[s.empty,s.name,s.score,s.cnt,s.st,s.rem,s.gone,s.wait,(s.photo||'').length].join(':')).join('|'),MS.result?MS.result.winner+'_'+MS.result.kind:''].join('~');
+  if(playEl.dataset.sg===sig)return;
+  playEl.dataset.sg=sig;
+  const order=[0,1,2,3].map(k=>MS.seats[(MS.me+k)%4]);
+  const fl=(MS.bd.match(/F/g)||[]).length;
+  let h='<div class="bar"><div class="meta">Ronda '+MS.round+' · Gana quien gane '+MS.target+' · '+MN_DIFF[MS.df].n+'</div><div class="tools">'+dToolsHTML()+'</div></div>';
+  h+='<div class="arena mn"><div class="sopps">'+order.map(mnCardHTML).join('')+'</div>';
+  h+='<div class="mntop"><span>⏱ <b id="mnT">'+mnFmt(mnEl())+'</b></span><span>💣 '+Math.max(0,MS.nm-fl)+'</span></div>'+mnBoardHTML();
+  h+='</div>'+mnActionsHTML();
+  playEl.innerHTML=h;
+  const ov=$('#sheetOver');ov.hidden=!MS.over;
+  if(MS.over){
+    const w=MS.seats[MS.over.winner],mine=w&&w.i===MS.me;
+    $('#overTitle').textContent=mine?'¡Ganaste la partida!':(w?w.name+' gana la partida':'Fin de la partida');
+    $('#overText').textContent='Llegó a '+MS.target+' rondas ganadas en '+MS.round+' rondas.'+(mine?'':' Puedes empezar otra cuando quieras.');
+  }
+}
+function mnAct(k,i){
+  if(NET.role==='guest'){NET.send({t:'mm',k:k,c:i});return;}
+  const s=MS.seats[MS.me];if(!s)return;
+  if(k==='r')mnReveal(s,i);else mnFlag(s,i);
+  render();
+}
+setInterval(()=>{const e=$('#mnT');if(e&&CUR==='mines'&&MS.phase==='play')e.textContent=mnFmt(mnEl());},250);
+document.addEventListener('click',e=>{
+  if(CUR!=='mines')return;
+  const c=e.target.closest('[data-mi]');
+  if(c){if(Date.now()-MS.lp<700)return;if(MS.phase==='play')mnAct(MS.mode==='flag'?'f':'r',+c.dataset.mi);return;}
+  const b=e.target.closest('[data-mn]');if(!b)return;
+  const a=b.dataset.mn;
+  if(a==='dig'||a==='flag'){MS.mode=a;render();}
+  else if(a==='next'&&NET.role!=='guest'&&MS.phase==='round')mnStartRound();
+});
+document.addEventListener('contextmenu',e=>{const c=e.target.closest&&e.target.closest('[data-mi]');if(c&&CUR==='mines'){e.preventDefault();if(MS.phase==='play')mnAct('f',+c.dataset.mi);}});
+let mnLT=0;
+document.addEventListener('pointerdown',e=>{const c=e.target.closest&&e.target.closest('[data-mi]');if(!c||CUR!=='mines')return;clearTimeout(mnLT);mnLT=setTimeout(()=>{MS.lp=Date.now();if(MS.phase==='play')mnAct('f',+c.dataset.mi);},420);});
+['pointerup','pointercancel','pointermove'].forEach(t=>document.addEventListener(t,()=>clearTimeout(mnLT)));
+
+function bgShow(t){$('#bgBody').textContent=t;}
+function bgLoad(){
+  let old='';try{old=localStorage.getItem('bg.txt')||'';}catch(e){}
+  if(old)bgShow(old);
+  fetch('BG.txt?'+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():Promise.reject()).then(t=>{bgShow(t);try{localStorage.setItem('bg.txt',t);}catch(e){}}).catch(()=>{if(!old)bgShow('No se encontró BG.txt junto a este archivo. Crea un BG.txt en la misma carpeta que index.html y tócalo en "Recargar", o usa "Cargar BG.txt" para elegirlo desde tu teléfono.');});
+}
+document.addEventListener('change',e=>{if(e.target.id!=='bgFile')return;const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const t=String(r.result||'');bgShow(t);try{localStorage.setItem('bg.txt',t);}catch(x){}};r.readAsText(f);});
 const MENU={
   el:$('#menu'),hasGame:false,view:'home',sb:3,
   init(){this.sb=G.botN>=1?G.botN:3;$('#mFan').innerHTML=parseCards('A♠ K♠').map(c=>cardHTML(c)).join('')+tileHTML(6,6,{d:1})+tileHTML(5,2)+tileHTML(3,3,{d:1});this.show('home');},
   show(v){this.view=v||'home';$('#sheetOver').hidden=true;this.el.hidden=false;this.paint();this.el.scrollTop=0;},
   hide(){this.el.hidden=true;showTab('play');},
   resume(){this.hide();if(this.hasGame&&curSeats().length)render();},
-  solo(game){if(game==='snake'){sSolo();return;}if(game==='domino'){dSolo();return;}if(NET.role||NET.room)NET.leave(null,true);G.botN=this.sb;saveCfg();newGame();},
+  solo(game){if(game==='mines'){mnSolo();return;}if(game==='snake'){sSolo();return;}if(game==='domino'){dSolo();return;}if(NET.role||NET.room)NET.leave(null,true);G.botN=this.sb;saveCfg();newGame();},
   paint(){
     const home=this.view==='home';
-    $('#mHome').hidden=!home;$('#mMp').hidden=this.view!=='mp';$('#mGames').hidden=this.view!=='games';$('#mSnk').hidden=this.view!=='snk';
+    $('#mHome').hidden=!home;$('#mMp').hidden=this.view!=='mp';$('#mGames').hidden=this.view!=='games';$('#mSnk').hidden=this.view!=='snk';$('#mMn').hidden=this.view!=='mns';$('#mGd').hidden=this.view!=='guides';$('#mBg').hidden=this.view!=='bg';
     if(home){
       const online=NET.role==='guest'||NET.room;
       $('#mResume').hidden=!(this.hasGame&&!curHold());
       $('#mResume .mt').textContent=online?'Volver a la mesa':'Continuar partida';
       
       $('#mMpSub').textContent=NET.role==='guest'?'Estás conectado a una mesa':(NET.room?'Tu mesa está abierta · código '+NET.code:'Crea una mesa o únete con un código');
-    }else if(this.view==='games'){$('#mBots').textContent=this.sb+(this.sb===1?' bot':' bots');}else if(this.view==='snk'){sFruitPaint();}
+    }else if(this.view==='games'){$('#mBots').textContent=this.sb+(this.sb===1?' bot':' bots');}else if(this.view==='snk'){sFruitPaint();}else if(this.view==='mns'){mnPaint();}else if(this.view==='guides'){}else if(this.view==='bg'){bgLoad();}
     else NET.paint();
   }
 };
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-menu]');if(!b)return;const a=b.dataset.menu,M=MENU;
+  if(a==='refresh'){location.reload();return;}
+  if(a==='guides'){M.show('guides');return;}
+  if(a==='bg'){M.show('bg');return;}
   if(a==='solo')M.show('games');
   else if(a==='solo-poker')M.solo('poker');
   else if(a==='solo-domino')M.solo('domino');
   else if(a==='solo-snake')M.show('snk');
+  else if(a==='solo-mines')M.show('mns');
+  else if(a==='mines-go')M.solo('mines');
+  else if(a==='mdiff'){MS.dfp=+b.dataset.v||0;mnSave();M.paint();}
+  else if(a==='guide-mines'){M.hide();showTab('guideMs');}
   else if(a==='snake-go')M.solo('snake');
   else if(a==='mp')NET.open();
   else if(a==='home'){if(!NET.role&&!NET.room){NET.mode='';NET.err='';NET.busy='';}M.show('home');}
