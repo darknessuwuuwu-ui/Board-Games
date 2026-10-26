@@ -1,8 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><script>
-(function(){function show(m){try{var d=document.getElementById('errBox');if(!d){d=document.createElement('pre');d.id='errBox';d.style.cssText='position:fixed;left:8px;right:8px;bottom:8px;z-index:99999;max-height:40vh;overflow:auto;background:#3a0d0d;color:#fff;font:12px/1.4 monospace;padding:10px;border-radius:8px;white-space:pre-wrap;margin:0';(document.body||document.documentElement).appendChild(d);}d.textContent+=m+'\n';}catch(x){}}
-window.addEventListener('error',function(e){show('Error: '+(e.message||'desconocido')+(e.lineno?' (línea '+e.lineno+':'+e.colno+')':''));});
-window.addEventListener('unhandledrejection',function(e){show('Error: '+String((e.reason&&e.reason.message)||e.reason||'promesa rechazada'));});})();
-</script><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Board Games</title>
 <meta name="claude:viewport-fit-sides" content="cover"><meta name="theme-color" content="#0a1a16"><link rel="icon" type="image/png" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><meta name="apple-mobile-web-app-title" content="Board Games">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -868,7 +864,7 @@ main{flex:1;min-height:0;display:flex;flex-direction:column}
       <section><h2>Controles</h2>
         <ul><li>Toca una casilla con ⛏ Cavar para destaparla.</li><li>Cambia a 🚩 Bandera para marcar minas, o deja pulsada una casilla (clic derecho en ordenador).</li><li>Cada número indica cuántas minas hay en las 8 casillas vecinas.</li></ul></section>
       <section><h2>Rondas</h2>
-        <ul><li>Todos empiezan con la misma zona abierta y el cronómetro corre para todos.</li><li>Quien limpia el tablero primero gana la ronda y suma un punto.</li><li>Quien pisa una mina queda eliminado de la ronda, pero su tablero se queda ahí mientras los demás siguen.</li><li>Si todos pisan una mina, gana quien tenga el mayor porcentaje de casillas despejadas.</li><li>Gana la partida quien llegue primero a las rondas elegidas.</li></ul></section>
+        <ul><li>Todos empiezan con la misma zona abierta y el cronómetro corre para todos.</li><li>Quien limpia el tablero primero gana la ronda y suma un punto.</li><li>Si alguien pisa una mina, la ronda termina: gana quien lleve más casillas despejadas.</li><li>Gana la partida quien llegue primero a las rondas elegidas.</li></ul></section>
       <section><h2>Dificultades</h2>
         <ul><li>Fácil: 9×9 con 10 minas.</li><li>Medio: 12×12 con 24 minas.</li><li>Difícil: 14×14 con 40 minas.</li></ul></section>
     </article>
@@ -947,7 +943,7 @@ main{flex:1;min-height:0;display:flex;flex-direction:column}
       <div class="fan" id="mFan" aria-hidden="true"></div>
       <h1 class="mtitle">Board Games</h1>
       <p class="mby">BY: Danilo</p>
-      <p class="ver ver-m">v1.1</p>
+      <p class="ver ver-m">v1.2</p>
       <div class="mbtns">
         <button class="mbtn" id="mResume" data-menu="resume" hidden><span class="mt">Continuar partida</span></button>
         <button class="mbtn gold" data-menu="solo"><span class="mt">Jugar solo</span><span class="ms">Póker, dominó, Snake o Buscaminas</span></button>
@@ -987,7 +983,7 @@ main{flex:1;min-height:0;display:flex;flex-direction:column}
     <div id="mMn" class="panel mpanel" hidden>
       <div class="row"><button class="mini" data-menu="solo">← Atrás</button></div>
       <h2>Buscaminas</h2>
-      <p class="note">Gana quien limpie el tablero primero. Quien pisa una mina queda fuera de la ronda; si todos explotan, gana el mayor porcentaje.</p>
+      <p class="note">Gana quien limpie el tablero primero. Si alguien pisa una mina, termina la ronda.</p>
       <div id="mDiff"></div>
       <div class="row sp" style="margin-top:16px"><button class="btn raise" data-menu="mines-go">Empezar</button></div>
     </div>
@@ -3161,11 +3157,10 @@ function mnFlood(s,i){
 }
 function mnReveal(s,i){
   if(MS.phase!=='play'||s.st!=='play'||s.rv[i]||s.fl[i])return;
-  if(MS.mines[i]){s.rv[i]=1;s.st='lost';mnLog(s.name+' pisó una mina');if(s.i===MS.me)sfx('die');mnCheck(s);return;}
+  if(MS.mines[i]){s.rv[i]=1;s.st='lost';mnEnd('mine',s);return;}
   mnFlood(s,i);
   if(s.cnt>=mnTS()){s.st='done';s.tm=mnEl();mnEnd('clear',s);}
 }
-function mnCheck(s){if(MS.phase==='play'&&!MS.seats.some(t=>t.st==='play'))mnEnd('mine',s);}
 function mnFlag(s,i){if(MS.phase!=='play'||s.st!=='play'||s.rv[i])return;s.fl[i]^=1;}
 function mnBot(s){
   const n=MS.w*MS.h,fr=[],any=[];
@@ -3228,13 +3223,13 @@ function mnEnd(kind,who){
   const tm=mnEl();MS.base=tm;
   let w=-1;
   if(kind==='clear')w=who.i;
-  else{let best=-1,c=0;MS.seats.forEach(s=>{if(s.rv){if(s.cnt>best){best=s.cnt;c=1;w=s.i;}else if(s.cnt===best)c++;}});if(c!==1)w=-1;}
+  else{let best=-1,c=0;MS.seats.forEach(s=>{if(s!==who&&s.st==='play'){if(s.cnt>best){best=s.cnt;c=1;w=s.i;}else if(s.cnt===best)c++;}});if(c!==1)w=-1;}
   MS.phase='round';
   if(w>=0)MS.seats[w].score++;
   MS.result={kind:kind,who:who.i,winner:w,tm:tm};
-  mnLog(kind==='clear'?who.name+' limpió el tablero en '+mnFmt(tm):'Todos pisaron minas');
+  mnLog(kind==='clear'?who.name+' limpió el tablero en '+mnFmt(tm):who.name+' pisó una mina');
   if(w>=0&&MS.seats[w].score>=MS.target){MS.phase='over';MS.over={winner:w};}
-  sfx(w===MS.me?'swin':'slose');
+  sfx(kind==='mine'&&who.i===MS.me?'die':(w===MS.me?'swin':'slose'));
   render();
 }
 function mnBoard(p){
@@ -3301,7 +3296,7 @@ function mnDrop(s){
   const p=MS.seats[s];if(!p)return;
   p.rem=false;
   if(MS.hold){mnNewMatch(true);NET.paint();return;}
-  p.gone=true;if(p.st==='play'){p.st='';mnCheck(p);}
+  p.gone=true;if(p.st==='play')p.st='';
   if(p.wait){p.empty=true;p.wait=false;}
   mnLog(p.name+' salió de la mesa');
   render();NET.paint();
@@ -3310,7 +3305,7 @@ function mnDrop(s){
 function mnCardHTML(p){
   if(p.empty)return '<div class="snp ghost"></div>';
   const playing=(MS.phase==='play'||MS.phase==='round'||MS.phase==='over')&&!p.wait&&(p.st||p.cnt);
-  const st=p.wait?' · ⏳':(p.st==='done'?' · ✅ '+mnFmt(p.tm):(p.st==='lost'?' · 💥 '+Math.round(p.cnt/mnTS()*100)+'%':(playing?' · '+Math.round(p.cnt/mnTS()*100)+'%':'')));
+  const st=p.wait?' · ⏳':(p.st==='done'?' · ✅ '+mnFmt(p.tm):(p.st==='lost'?' · 💥':(playing?' · '+Math.round(p.cnt/mnTS()*100)+'%':'')));
   const av='<div class="avatar" style="background:'+(p.photo?'#000':p.color)+'">'+avatarInner(p)+'</div>';
   return '<div class="snp'+(p.i===MS.me?' me':'')+(p.st==='lost'?' dead':'')+'" style="--c:'+p.color+'">'+av+'<div class="nm">'+esc(p.name)+'</div><div class="stack">🏆 '+p.score+st+'</div></div>';
 }
@@ -3323,13 +3318,13 @@ function mnActionsHTML(){
   }
   if(MS.phase==='round'){
     const r=MS.result,w=r&&r.winner>=0?MS.seats[r.winner]:null,who=MS.seats[r.who];
-    const head=r.kind==='clear'?(who.i===MS.me?'¡Terminaste primero!':esc(who.name)+' terminó primero'):(w?(w.i===MS.me?'¡Ganas por mayor porcentaje!':esc(w.name)+' gana por mayor porcentaje'):'Todos pisaron minas');
-    const det=(r.kind==='clear'?'Tiempo: '+mnFmt(r.tm)+'. ':'Todos explotaron una mina'+(w?' · '+Math.round(w.cnt/mnTS()*100)+'% despejado. ':'. Empate: '))+(w?(w.i===MS.me?'Sumas un punto.':'Punto para '+esc(w.name)+'.'):'nadie suma punto.');
+    const head=r.kind==='clear'?(who.i===MS.me?'¡Terminaste primero!':esc(who.name)+' terminó primero'):(who.i===MS.me?'¡Pisaste una mina!':esc(who.name)+' pisó una mina');
+    const det=(r.kind==='clear'?'Tiempo: '+mnFmt(r.tm)+'. ':'La ronda se acaba. ')+(w?(w.i===MS.me?'Sumas un punto.':'Punto para '+esc(w.name)+'.'):'Nadie suma punto.');
     return '<section class="actions"><h3>'+head+'</h3><p class="muted">'+det+'</p>'+(guest?'<p class="status">Esperando al anfitrión…</p>':'<button class="btn raise" data-mn="next">Siguiente ronda</button>')+'</section>';
   }
   if(me&&me.wait)return '<section class="actions"><p class="status">Entras en la siguiente ronda</p></section>';
   if(MS.phase==='count')return '<section class="actions"><p class="status">Prepárate… '+MS.count+'</p></section>';
-  if(me&&me.st!=='play')return '<section class="actions"><p class="status">'+(me.st==='lost'?'Pisaste una mina. Esperando a los demás…':'Esperando el final de la ronda…')+'</p></section>';
+  if(me&&me.st!=='play')return '<section class="actions"><p class="status">Esperando el final de la ronda…</p></section>';
   return '<section class="actions mine"><div class="btns two"><button class="btn call" data-mn="dig" aria-pressed="'+(MS.mode==='dig')+'"><span class="t">⛏ Cavar</span></button><button class="btn call" data-mn="flag" aria-pressed="'+(MS.mode==='flag')+'"><span class="t">🚩 Bandera</span></button></div></section>';
 }
 function mnBoardHTML(){
